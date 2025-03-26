@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Purchase Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Century Gothic', sans-serif; /* Changed font to Century Gothic */
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #ff6f61;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px; /* Set a max width for the container */
+            margin: 0 auto; /* Center the container */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .dropdown {
+            width: 100%; /* Full width of the container */
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+        select {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #424242;
+            border-radius: 6px;
+            background-color: #333;
+            color: #e0e0e0;
+            font-size: 16px;
+        }
+        .result {
+            margin-top: 10px;
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Align results to the start */
+        }
+        .product-details {
+            width: 100%; /* Full width of the container */
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        .product-item {
+            margin: 5px 0;
+            padding: 5px;
+            border-bottom: 1px solid #424242;
+            width: 100%; /* Make product items take full width */
+        }
+        .search-container {
+            width: 100%; /* Full width of the container */
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #424242;
+            border-radius: 6px;
+            background-color: #333;
+            color: #e0e0e0;
+            font-size: 16px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #424242;
+        }
+        th {
+            background-color: #1e1e1e;
+        }
+        tr:hover {
+            background-color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Customer Purchase Dashboard</h1>
+    <div class="container">
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search Customers or Products..." onkeyup="filterData()">
+        </div>
+        <div class="dropdown">
+            <label for="customerSelect">Select Customer:</label>
+            <select id="customerSelect" onchange="updateProducts()">
+                <option value="">-- Select a Customer --</option>
+                <!-- Options will be populated here -->
+            </select>
+            <div id="customerProducts" class="result"></div>
+        </div>
+        <div class="dropdown">
+            <label for="productSelect">Select Product:</label>
+            <select id="productSelect" onchange="updateCustomers()">
+                <option value="">-- Select a Product --</option>
+                <!-- Options will be populated here -->
+            </select>
+            <div id="productCustomers" class="result"></div>
+        </div>
+        <div class="product-details" id="productDetails">
+            <h2>Top 3 Products Purchased</h2>
+            <ul id="topProducts"></ul>
+        </div>
+        <div class="product-table">
+            <h2>All Purchases</h2>
+            <table id="purchaseTable">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Product</th>
+                        <th>Product Code</th>
+                    </tr>
+                </thead>
+                <tbody id="purchaseBody">
+                    <!-- Purchase data will be populated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Mock data with product codes - replace this with your actual data
+        const data = [
+        { customer: "SOUTH SEAS CRUISES", product: "Sam Miranda Ballerina Moscato", code: "WAUSMBMOS010" },
+{ customer: "SOUTH SEAS CRUISES", product: "Sam Miranda Cabernet Sauvignon", code: "WAUSMMRCAB010" },
+{ customer: "SOUTH SEAS CRUISES", product: "Sam Miranda Shiraz", code: "WAUSMMRSHI010" },
+{ customer: "SOUTH SEAS CRUISES", product: "Underline Shiraz", code: "WAUUNLNSHI010" },
+{ customer: "SOUTH SEAS CRUISES", product: "Underline Semillion/Sauv Blanc", code: "WAUUNLSSB010" },
+{ customer: "SOUTH SEAS CRUISES", product: "Poker Face Chardonnay", code: "WAUWEPFCHD010" },
+{ customer: "SOUTH SEAS CRUISES", product: "Poker Face Shiraz", code: "WAUWEPFSHI010" },
+{ customer: "SOUTH SEAS CRUISES", product: "Richland Chardonnay", code: "WAUWERCHD010" },
+{ customer: "SOUTH SEAS CRUISES", product: "Richland Shiraz", code: "WAUWERSHI010" },
+{ customer: "SOUTH SEAS CRUISES", product: "Baron D'Arignac Red", code: "WFR645014" },
+{ customer: "SOUTH SEAS CRUISES", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
+{ customer: "SOUTH SEAS CRUISES", product: "Charton Blanc de Blancs Brut", code: "WFRLGCVCB010" },
+{ customer: "SOUTH SEAS CRUISES", product: "Grandial Blanc de Blancs Brut", code: "WFRLGCVGB010" },
+{ customer: "SOUTH SEAS CRUISES", product: "Alta Mora Etna Bianco", code: "WITETH0810-6-2021" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Rymill The Yearling Sauv Blanc", code: "WAURTYSB010" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Sam Miranda Cabernet Sauvignon", code: "WAUSMMRCAB010" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Shaw+Smith Sauvignon Blanc", code: "WAUSSSBL010" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Richland Chardonnay", code: "WAUWERCHD010" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Saint Julien Duluc", code: "WFR102022" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Macon Villages Chartron", code: "WFR241100" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Baron D'Arignac Red", code: "WFR645014" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Moulins De Citran Haut-Medoc", code: "WFR701182" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Nuits Saint Georges Moillard", code: "WFR755660" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Meursault Chartron ET", code: "WFR761461" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Pouilly Fuisse Charton", code: "WFR761476" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Bourgogne Chartron Pinot Noir", code: "WFR761493" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Nicolis Valpolicella", code: "WITETH0776-2021" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Cusumano Angimbe Bianco", code: "WITETH0815-6-2021" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Bellavista Franciacorta 750ml", code: "WITETH1401-6-NV" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Borgogno Langhe Nebbiolo", code: "WITETH2402-2020" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Borgogno Barbera d'Alba", code: "WITETH2418-6-2020" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Lavis Pinot Grigio Trentino", code: "WITETH57004-2022" },
+{ customer: "LAUCALA ISLAND RESORT", product: "La Gioiosa Prosecco", code: "WITETH5901-NV" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Belvento Vermentino Toscana", code: "WITETH6403-6-2022" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Villa Sparina Gavi -750ml", code: "WITETH7702-2022" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Kendall Jackson V R Merlot", code: "WUSJEKJVRMER010" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Kendall Jackson V R Zinfandel", code: "WUSJEKJVRZED010" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Joel Gott Pinot Noir SBC", code: "WUSSHWJGSBPN010" },
+{ customer: "LAUCALA ISLAND RESORT", product: "Pacific Heights Pinot Noir", code: "WUSSHWPHPN010" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Mancura Etnia Chardonnay", code: "WARGMAECHD010" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Mancura Vuelo Magico Cab Sauv", code: "WARGMALBRS010" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Gibson AOVC Eden Valley Shiraz", code: "WAUGWEVSH010" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Shaw+Smith M3 Chardonnay", code: "WAUSSCHD010" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Shaw+Smith Sauvignon Blanc", code: "WAUSSSBL010" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Yabby Lake SB Pinot Noir", code: "WAUYLSVPNN010" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Macon Villages Chartron", code: "WFR241100" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Santenay DOM Carillon", code: "WFR241671" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Rully 1er Cru Le Mei Chartron", code: "WFR242278" },
+{ customer: "KOKOMO ISLAND RESORT", product: "AOP Sancerre Les Fondettes", code: "WFR27520" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Chablis1ERCRU MichautVaucoupin", code: "WFR617666" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Cht Cadet BON GBGC", code: "WFR716095" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Clos De Vougeot Gran", code: "WFR745335" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Chablis Domaine Michaut 2020", code: "WFR745530" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Chablis Domain Michaut 2021", code: "WFR745530-2021" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Pommard 1er Cru Les", code: "WFR755234" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Nuits Saint Georges Moillard", code: "WFR755660" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Chassagne Montrachet Chartron", code: "WFR761436" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Meursault Chartron ET", code: "WFR761461" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Pouilly Fuisse Charton", code: "WFR761476" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Bourgogne Chartron Pinot Noir", code: "WFR761493" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Gevrey Chambertin 1e", code: "WFR761504" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Vosne Romanee Chartron", code: "WFR761531" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Cham Peters Reserve Brut NV", code: "WFRAW 0000 RESBRT" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Cham Peters Millesime 2019", code: "WFRAW 2019 LESPRT" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Lallier Brut Balthazar 12L", code: "WFRCLCPG050" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Lalier Brut Nabuchodonozor 15L", code: "WFRCLCPG055" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Chateau Mouton Rothschild Cru", code: "WFRCMRPGC010" },
+{ customer: "KOKOMO ISLAND RESORT", product: "AOPSancerr Les Fondettes", code: "WFRW 2023 27520" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Nicolis Valpolicella", code: "WITETH0776-2021" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Alta Mora Etna Bianco", code: "WITETH0810-6-2021" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Alta Mora Etna Rosso", code: "WITETH0811-6-2019" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Cusumano Angimbe Bianco", code: "WITETH0815-6-2021" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Scarpa Moscato d'Asti", code: "WITETH1156-6-2022" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Scarpa Vermouth d Torino Rosso", code: "WITETH1157-6-NV" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Bellavista Franciacorta 750ml", code: "WITETH1401-6-NV" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Borgogno Barolo Classico", code: "WITETH2401-6-2018" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Borgogno Langhe Nebbiolo", code: "WITETH2402-2020" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Borgogno Barolo DOCG Riserva", code: "WITETH2403-6-2015" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Borgogno Langhe Riesling", code: "WITETH2433-6-2020" },
+{ customer: "KOKOMO ISLAND RESORT", product: "St.Pauls Pinot Grigio AA", code: "WITETH50211-2021" },
+{ customer: "KOKOMO ISLAND RESORT", product: "St.Pauls Gfill Sauvignon AA", code: "WITETH50213-2021" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Sella&Mosca La Cala Vermentino", code: "WITETH6209-6-2022" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Belvento Vermentino Toscana", code: "WITETH6403-6-2022" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Villa Sparina Gavi -750ml", code: "WITETH7702-2022" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Riscasoli Brolio Chianti Risv", code: "WITETH9307-2019" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Ridolfi Brunello di Montalcino", code: "WITETH9701-6-2017" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Ridolfi Fiero Rosso Toscana", code: "WITETH9708-6-2019" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Cabernet Sauvignon", code: "WSAR 2019 OLDCAB" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Merlot", code: "WSAR 2019 OLDMER" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Syrah", code: "WSAR 2019 OLDSYR" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Cabernet Franc", code: "WSAR 2020 OLDFRC" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Oldenburg < CL Red", code: "WSAR 2021 OLDCLR" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Grenache Noir", code: "WSAR 2021 OLDGRN" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Rondekop   Per Se", code: "WSAR 2021 RONPER" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Rondekop   Rhodium", code: "WSAR 2021 RONRHD" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Rondekop   Stone Axe", code: "WSAR 2021 RONSTN" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Chardonnay", code: "WSAW 2023 OLDCHD" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Chenin Blanc", code: "WSAW 2023 OLDCHN" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Oldenburg < CL White", code: "WSAW 2023 OLDCLW" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Freemark Abbey Chardonnay", code: "WUSJEFACHD010" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Hartford Court Chardonnay", code: "WUSJEHFCHD010" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Hartford Court Pinot Noir", code: "WUSJEHFPN010" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Liberated Pinot Noir", code: "WUSJEKJLBPN010" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Hartford Court RussianRivPinot", code: "WUSR 2022 HCTPINOTR 5002274" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Joel Gott Pinot Noir CA", code: "WUSSHWJGPN010" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Joel Gott Pinot Noir SBC", code: "WUSSHWJGSBPN010" },
+{ customer: "KOKOMO ISLAND RESORT", product: "Hartford Court RussianRivChard", code: "WUSW 2019 HCTCHARD 0102274" },
+{ customer: "RADISSON RESORT", product: "Wildcard Unoaked Chardonnay", code: "WAUAEPLWCHD010" },
+{ customer: "RADISSON RESORT", product: "Gossips Chardonnay", code: "WAUGPCHD010" },
+{ customer: "RADISSON RESORT", product: "Langmeil Bella Rouge Cab Rose", code: "WAULMBRCAB010" },
+{ customer: "RADISSON RESORT", product: "Rymill The Yearling Cab/Sauv", code: "WAURTYCABS010" },
+{ customer: "RADISSON RESORT", product: "Sam Miranda Merlot", code: "WAUSMMRMER010" },
+{ customer: "RADISSON RESORT", product: "Sam Miranda Prosato", code: "WAUSMPROS010" },
+{ customer: "RADISSON RESORT", product: "Sashiko Grenache Shiraz", code: "WAUSSWGSM010" },
+{ customer: "RADISSON RESORT", product: "Richland Moscato", code: "WAUWERMS010" },
+{ customer: "RADISSON RESORT", product: "Yellow Tail Pinot Grigio", code: "WAUYTPG010" },
+{ customer: "RADISSON RESORT", product: "Baron D'Arignac Red", code: "WFR645014" },
+{ customer: "RADISSON RESORT", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
+{ customer: "RADISSON RESORT", product: "Bellavista Franciacorta 750ml", code: "WITETH1401-6-NV" },
+{ customer: "RADISSON RESORT", product: "Brightwater Gravels Pinot Gris", code: "WNZWLPNG030" },
+{ customer: "RADISSON RESORT", product: "Brightwater Gravels Pinot Noir", code: "WNZWLPNN030" },
+{ customer: "RADISSON RESORT", product: "Joel Gott Pinot Noir SBC", code: "WUSSHWJGSBPN010" },
+{ customer: "GRACE ROAD TRADING", product: "Gossips Cabernet Sauvignon", code: "WAUGPCAB010" },
+{ customer: "GRACE ROAD TRADING", product: "Gossips Chardonnay", code: "WAUGPCHD010" },
+{ customer: "GRACE ROAD TRADING", product: "Gossips Merlot", code: "WAUGPMER010" },
+{ customer: "GRACE ROAD TRADING", product: "Gossips Moscato Sweet Lips", code: "WAUGPMSL010" },
+{ customer: "GRACE ROAD TRADING", product: "Gossips Pink Moscato", code: "WAUGPPMO010" },
+{ customer: "GRACE ROAD TRADING", product: "Gossips Rose", code: "WAUGPROS010" },
+{ customer: "GRACE ROAD TRADING", product: "Gossips Sauvignon Blanc", code: "WAUGPSB010" },
+{ customer: "GRACE ROAD TRADING", product: "Gossips Shiraz", code: "WAUGPSHI010" },
+{ customer: "GRACE ROAD TRADING", product: "Gossips Semillon Sauv Blanc", code: "WAUGPSSB010" },
+{ customer: "GRACE ROAD TRADING", product: "Sweet Lips H/Pomegranate&Lime", code: "WAUGSLIHPL010" },
+{ customer: "GRACE ROAD TRADING", product: "Sweet Lips Mango E/Pasionfruit", code: "WAUGSLIMEP010" },
+{ customer: "GRACE ROAD TRADING", product: "SweetLips P/CoconutMexicanLime", code: "WAUGSLIPCM010" },
+{ customer: "GRACE ROAD TRADING", product: "Sweet Lips P/Raspberry&Vanila", code: "WAUGSLIPRV010" },
+{ customer: "GRACE ROAD TRADING", product: "Rumours Cabernet Sauv", code: "WAURMCSV010" },
+{ customer: "GRACE ROAD TRADING", product: "Rumours Merlot", code: "WAURMMER010" },
+{ customer: "GRACE ROAD TRADING", product: "Rumours Pink Moscato", code: "WAURMPMOS010" },
+{ customer: "GRACE ROAD TRADING", product: "Rumours Shiraz", code: "WAURMSHI010" },
+{ customer: "GRACE ROAD TRADING", product: "Sam Miranda Chardonnay", code: "WAUSMMRCHD010" },
+{ customer: "GRACE ROAD TRADING", product: "Sam Miranda Shiraz", code: "WAUSMMRSHI010" },
+{ customer: "GRACE ROAD TRADING", product: "Underline Shiraz", code: "WAUUNLNSHI010" },
+{ customer: "GRACE ROAD TRADING", product: "Richland Cabernet Sauvignon", code: "WAUWERCAB010" },
+{ customer: "GRACE ROAD TRADING", product: "Richland Merlot", code: "WAUWERMER010" },
+{ customer: "GRACE ROAD TRADING", product: "Richland Moscato", code: "WAUWERMS010" },
+{ customer: "GRACE ROAD TRADING", product: "Richland Pinot Grigio", code: "WAUWERPG010" },
+{ customer: "GRACE ROAD TRADING", product: "Richland Sauvignon Blanc", code: "WAUWERSB010" },
+{ customer: "GRACE ROAD TRADING", product: "Richland Shiraz", code: "WAUWERSHI010" },
+{ customer: "GRACE ROAD TRADING", product: "Yellow Tail Merlot", code: "WAUYTMER010" },
+{ customer: "GRACE ROAD TRADING", product: "Yellow Tail Pinot Noir", code: "WAUYTPN010" },
+{ customer: "GRACE ROAD TRADING", product: "Yellow Tail Riesling", code: "WAUYTRSG010" },
+{ customer: "GRACE ROAD TRADING", product: "Yellow Tail Sauvignon Blanc", code: "WAUYTSBL010" },
+{ customer: "GRACE ROAD TRADING", product: "Yellow Tail Shiraz", code: "WAUYTSHI010" },
+{ customer: "GRACE ROAD TRADING", product: "Yellow Tail Bubbles", code: "WAUYTSPW010" },
+{ customer: "GRACE ROAD TRADING", product: "Yellow Tail Bubbles Rose", code: "WAUYTSPW020" },
+{ customer: "GRACE ROAD TRADING", product: "Baron D'Arignac White", code: "WFR643505" },
+{ customer: "GRACE ROAD TRADING", product: "Baron D'Arignac Rose", code: "WFR644363" },
+{ customer: "GRACE ROAD TRADING", product: "Baron D'Arignac Red", code: "WFR645014" },
+{ customer: "GRACE ROAD TRADING", product: "Baron D'Arignac Brut Sparkling", code: "WFR675134" },
+{ customer: "GRACE ROAD TRADING", product: "Baron D'Arignac Brut S/Rose", code: "WFR687487" },
+{ customer: "GRACE ROAD TRADING", product: "JP Chenet Watermelon", code: "WFR745583" },
+{ customer: "GRACE ROAD TRADING", product: "JP Chenet Cassis", code: "WFR745628" },
+{ customer: "GRACE ROAD TRADING", product: "JP Chenet Peach", code: "WFR745629" },
+{ customer: "GRACE ROAD TRADING", product: "JP Chenet Strawberry/Raspberry", code: "WFR745630" },
+{ customer: "GRACE ROAD TRADING", product: "JP Chenet Litchi", code: "WFR745631" },
+{ customer: "GRACE ROAD TRADING", product: "JP Chenet Apple", code: "WFR745632" },
+{ customer: "GRACE ROAD TRADING", product: "JP Chenet Pineapple", code: "WFR745633" },
+{ customer: "GRACE ROAD TRADING", product: "JP Chenet Chardonnay", code: "WFRLGCCCC010" },
+{ customer: "GRACE ROAD TRADING", product: "JP Chenet Sauvignon", code: "WFRLGCCCS010" },
+{ customer: "GRACE ROAD TRADING", product: "JP Chenet Merlot", code: "WFRLGCMER010" },
+{ customer: "GRACE ROAD TRADING", product: "JP Chenet Shiraz", code: "WFRLGCSHI010" },
+{ customer: "GRACE ROAD TRADING", product: "Grandial Blanc de Blancs Brut", code: "WFRLGCVGB010" },
+{ customer: "GRACE ROAD TRADING", product: "Brightwater Gravels Pinot Gris", code: "WNZWLPNG030" },
+{ customer: "GRACE ROAD TRADING", product: "Brightwater Gravels Pinot Noir", code: "WNZWLPNN030" },
+{ customer: "GRACE ROAD TRADING", product: "Brightwater Gravels Sauv Blanc", code: "WNZWLSBL030" },
+{ customer: "GRACE ROAD TRADING", product: "Kendall Jackson V R Sauv Blanc", code: "WUSJEKJVRSBL010" },
+{ customer: "EDGE RESORT", product: "Vistamar Sepia Cabernet Sauv", code: "WARGVISRCAB010" },
+{ customer: "EDGE RESORT", product: "Gossips Chardonnay", code: "WAUGPCHD010" },
+{ customer: "EDGE RESORT", product: "Gibson 'The Dirtman' Shiraz", code: "WAUGWDTMN010" },
+{ customer: "EDGE RESORT", product: "Rumours Cabernet Sauv", code: "WAURMCSV010" },
+{ customer: "EDGE RESORT", product: "Sam Miranda Ballerina Rosato", code: "WAUSMBROS010" },
+{ customer: "EDGE RESORT", product: "Sam Miranda Riesling", code: "WAUSMKVRIE010" },
+{ customer: "EDGE RESORT", product: "Sam Miranda Cabernet Sauvignon", code: "WAUSMMRCAB010" },
+{ customer: "EDGE RESORT", product: "Sam Miranda Prosecco", code: "WAUSMPROSP010" },
+{ customer: "EDGE RESORT", product: "Shaw+Smith Sauvignon Blanc", code: "WAUSSSBL010" },
+{ customer: "EDGE RESORT", product: "Shaw+Smith Shiraz", code: "WAUSSSHI010" },
+{ customer: "EDGE RESORT", product: "3 Bridges Chardonnay", code: "WAUWEBCHD010" },
+{ customer: "EDGE RESORT", product: "Richland Chardonnay", code: "WAUWERCHD010" },
+{ customer: "EDGE RESORT", product: "Okiwi Bay Marlboru Sauv Blanc", code: "WAUWESOB010" },
+{ customer: "EDGE RESORT", product: "AOP Sancerre Les Fondettes", code: "WFR27520" },
+{ customer: "EDGE RESORT", product: "Pouilly Fume Les Ombelles", code: "WFR27524" },
+{ customer: "EDGE RESORT", product: "Chablis Domaine Michaut 2020", code: "WFR745530" },
+{ customer: "EDGE RESORT", product: "Chablis Domain Michaut 2021", code: "WFR745530-2021" },
+{ customer: "EDGE RESORT", product: "Bourgogne Chartron Pinot Noir", code: "WFR761493" },
+{ customer: "EDGE RESORT", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
+{ customer: "EDGE RESORT", product: "Gremillet 'Selection' Brut", code: "WFRCGCPG010" },
+{ customer: "EDGE RESORT", product: "Bellavista Franciacorta 750ml", code: "WITETH1401-6-NV" },
+{ customer: "EDGE RESORT", product: "St.Pauls Pinot Grigio AA", code: "WITETH50211-2021" },
+{ customer: "EDGE RESORT", product: "Lavis Pinot Grigio Trentino", code: "WITETH57004-2022" },
+{ customer: "EDGE RESORT", product: "Lavis Sauv Blanc Trevenezie", code: "WITETH57015-2021" },
+{ customer: "EDGE RESORT", product: "La Gioiosa Prosecco", code: "WITETH5901-NV" },
+{ customer: "EDGE RESORT", product: "Sella&Mosca 'La Cala' Vermentino", code: "WITETH6209-6-2022" },
+{ customer: "EDGE RESORT", product: "Ridolfi 'Fiero' Rosso Toscana", code: "WITETH9708-6-2019" },
+{ customer: "EDGE RESORT", product: "Brightwater Gravels Pinot Noir", code: "WNZWLPNN030" },
+{ customer: "EDGE RESORT", product: "Liberated Pinot Noir", code: "WUSJEKJLBPN010" },
+{ customer: "EDGE RESORT", product: "Kendall Jackson V R Merlot", code: "WUSJEKJVRMER010" },
+{ customer: "EDGE RESORT", product: "Joel Gott Pinot Noir SBC", code: "WUSSHWJGSBPN010" },
+{ customer: "SIX SENSES FIJI", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
+{ customer: "SIX SENSES FIJI", product: "Villa Sparina Gavi -750ml", code: "WITETH7702-2022" },
+{ customer: "SIX SENSES FIJI", product: "La Gioiosa Prosecco", code: "WITETH5901-NV" },
+{ customer: "SIX SENSES FIJI", product: "Beans Espresso 1000g", code: "FCAWBSEB1000" },
+{ customer: "SIX SENSES FIJI", product: "Mr Boema Cleaner 500g Jar", code: "ZESBOEK650-1A" },
+{ customer: "SIX SENSES FIJI", product: "Cham Peters Reserve Brut NV", code: "WFRAW 0000 RESBRT" },
+{ customer: "SIX SENSES FIJI", product: "Napa Cellars Merlot", code: "WUSSHWNCMER010" },
+{ customer: "SIX SENSES FIJI", product: "Peter Lehmann P Riesling", code: "WAUAEPLPRIE010" },
+{ customer: "SIX SENSES FIJI", product: "Brightwater Gravels Pinot Gris", code: "WNZWLPNG030" },
+{ customer: "SIX SENSES FIJI", product: "Sheild Pinot Gris", code: "WNZDCSPG010" },
+{ customer: "SIX SENSES FIJI", product: "Lavis Pinot Grigio Trentino", code: "WITETH57004-2021" },
+{ customer: "SIX SENSES FIJI", product: "Joel Gott Pinot Noir SBC", code: "WUSSHWJGSBPN010" },
+{ customer: "SIX SENSES FIJI", product: "Bellavista Franciacorta 750ml", code: "WITETH1401-6-NV" },
+{ customer: "SHERATON RESORT", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
+{ customer: "SHERATON RESORT", product: "Borgogno Barolo Classico", code: "WITETH2401-6-2018" },
+{ customer: "SHERATON RESORT", product: "St.Pauls Pinot Grigio AA", code: "WITETH50211-2021" },
+{ customer: "SHERATON RESORT", product: "Lavis Pinot Grigio Trentino", code: "WITETH57004-2022" },
+{ customer: "SHERATON RESORT", product: "Riscasoli 'Brolio' Chianti", code: "WITETH9305-2020" },
+{ customer: "SHERATON RESORT", product: "Nicolis Amarone d Valpolicella", code: "WITETH0701-6-2017" },
+{ customer: "SHERATON RESORT", product: "Belvento Vermentino Toscana", code: "WITETH6403-6-2022" },
+{ customer: "SHERATON RESORT", product: "Kendall Jackson V R Merlot", code: "WUSJEKJVRMER010" },
+{ customer: "SHERATON RESORT", product: "Kendall Jackson G R Chardonnay", code: "WUSJEKJGRCHD010" },
+{ customer: "SHERATON RESORT", product: "Lavis Pinot Grigio Trentino", code: "WITETH57004-2021" },
+{ customer: "SHERATON RESORT", product: "Cham Peters Reserve Brut NV", code: "WFRAW 0000 RESBRT" },
+{ customer: "Intercontinental Fiji Golf Resort & Spa", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
+{ customer: "Intercontinental Fiji Golf Resort & Spa", product: "Rymill 'The Yearling' Cab/Sauv", code: "WAURTYCABS010" }
+        ];
+
+        const customers = [...new Set(data.map(item => item.customer))];
+        const products = [...new Set(data.map(item => item.product))];
+
+        const customerSelect = document.getElementById('customerSelect');
+        const productSelect = document.getElementById('productSelect');
+        const customerProductsDiv = document.getElementById('customerProducts');
+        const productCustomersDiv = document.getElementById('productCustomers');
+        const topProductsDiv = document.getElementById('topProducts');
+        const purchaseBody = document.getElementById('purchaseBody');
+
+        // Populate customer dropdown
+        customers.forEach(customer => {
+            const option = document.createElement('option');
+            option.value = customer;
+            option.textContent = customer;
+            customerSelect.appendChild(option);
+        });
+
+        // Populate product dropdown without showing product codes
+        products.forEach(product => {
+            const option = document.createElement('option');
+            option.value = product;
+            option.textContent = product; // Only show product name
+            productSelect.appendChild(option);
+        });
+
+        // Populate purchase table
+        function populatePurchaseTable() {
+            purchaseBody.innerHTML = ''; // Reset table display
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${item.customer}</td><td>${item.product}</td><td>${item.code}</td>`;
+                purchaseBody.appendChild(row);
+            });
+        }
+
+        // Update products based on selected customer
+        function updateProducts() {
+            const selectedCustomer = customerSelect.value;
+            customerProductsDiv.innerHTML = ''; // Reset products display
+
+            if (selectedCustomer) {
+                const customerProducts = data.filter(item => item.customer === selectedCustomer);
+                customerProductsDiv.innerHTML = '<strong>Purchased Products:</strong><br>';
+                customerProducts.forEach(item => {
+                    customerProductsDiv.innerHTML += `<div class="product-item"><strong>${item.product}</strong></div>`; // Make product names bold
+                });
+            }
+            updateTopProducts();
+        }
+
+        // Update customers based on selected product
+        function updateCustomers() {
+            const selectedProduct = productSelect.value;
+            productCustomersDiv.innerHTML = ''; // Reset customers display
+
+            if (selectedProduct) {
+                const productCustomers = data.filter(item => item.product === selectedProduct);
+                productCustomersDiv.innerHTML = '<strong>Customers Who Bought This Product:</strong><br>';
+                productCustomers.forEach(item => {
+                    productCustomersDiv.innerHTML += `<div class="product-item">${item.customer}</div>`;
+                });
+            }
+            updateTopProducts();
+        }
+
+        // Function to update the top 3 products purchased
+        function updateTopProducts() {
+            const productCounts = {};
+            data.forEach(item => {
+                productCounts[item.product] = (productCounts[item.product] || 0) + 1;
+            });
+
+            const sortedProducts = Object.entries(productCounts).sort((a, b) => b[1] - a[1]).slice(0, 3);
+            topProductsDiv.innerHTML = ''; // Reset top products display
+            sortedProducts.forEach(([product, count]) => {
+                topProductsDiv.innerHTML += `<li>${product}: ${count} customer(s)</li>`;
+            });
+        }
+
+        // Function to filter data based on search input
+        function filterData() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const filteredCustomers = customers.filter(customer => customer.toLowerCase().includes(searchValue));
+            const filteredProducts = products.filter(product => product.toLowerCase().includes(searchValue));
+
+            // Update customer dropdown
+            customerSelect.innerHTML = '<option value="">-- Select a Customer --</option>';
+            filteredCustomers.forEach(customer => {
+                const option = document.createElement('option');
+                option.value = customer;
+                option.textContent = customer;
+                customerSelect.appendChild(option);
+            });
+
+            // Update product dropdown
+            productSelect.innerHTML = '<option value="">-- Select a Product --</option>';
+            filteredProducts.forEach(product => {
+                const option = document.createElement('option');
+                option.value = product;
+                option.textContent = product; // Only show product name
+                productSelect.appendChild(option);
+            });
+        }
+
+        // Initial population of the purchase table
+        populatePurchaseTable();
+
+    </script>
+</body>
+</html>
