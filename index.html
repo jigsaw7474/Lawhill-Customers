@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Purchase Dashboard</title>
+    <title>Lawhill Wines Customer Details</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
             background-color: #121212;
             color: #e0e0e0;
-            font-family: 'Century Gothic', sans-serif; /* Changed font to Century Gothic */
+            font-family: 'Century Gothic', sans-serif;
             margin: 0;
             padding: 20px;
         }
@@ -18,15 +18,15 @@
             text-align: center;
         }
         .container {
-            max-width: 800px; /* Set a max width for the container */
-            margin: 0 auto; /* Center the container */
-            display: flex;
+            max-width: 800px;
+            margin: 0 auto;
+            display: none; /* Hide the container initially */
             flex-direction: column;
             align-items: center;
             margin-top: 20px;
         }
         .dropdown {
-            width: 100%; /* Full width of the container */
+            width: 100%;
             background-color: #1e1e1e;
             padding: 20px;
             border-radius: 12px;
@@ -50,10 +50,10 @@
             border-radius: 8px;
             display: flex;
             flex-direction: column;
-            align-items: flex-start; /* Align results to the start */
+            align-items: flex-start;
         }
         .product-details {
-            width: 100%; /* Full width of the container */
+            width: 100%;
             background-color: #1e1e1e;
             padding: 20px;
             border-radius: 12px;
@@ -63,10 +63,10 @@
             margin: 5px 0;
             padding: 5px;
             border-bottom: 1px solid #424242;
-            width: 100%; /* Make product items take full width */
+            width: 100%;
         }
         .search-container {
-            width: 100%; /* Full width of the container */
+            width: 100%;
             margin-bottom: 20px;
         }
         input[type="text"] {
@@ -94,55 +94,105 @@
         tr:hover {
             background-color: #333;
         }
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Customer Purchase Dashboard</h1>
-    <div class="container">
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Search Customers or Products..." onkeyup="filterData()">
-        </div>
+    <h1>Lawhill Wines Customer Details</h1>
+    <div class="container" id="dashboardContainer">
+        <!-- Menu Selection -->
         <div class="dropdown">
-            <label for="customerSelect">Select Customer:</label>
-            <select id="customerSelect" onchange="updateProducts()">
-                <option value="">-- Select a Customer --</option>
-                <!-- Options will be populated here -->
+            <label for="menuSelect">Select Menu:</label>
+            <select id="menuSelect" onchange="toggleMenu()">
+                <option value="wine">Wine Menu</option>
+                <option value="coffee">Coffee Menu</option>
             </select>
-            <div id="customerProducts" class="result"></div>
         </div>
-        <div class="dropdown">
-            <label for="productSelect">Select Product:</label>
-            <select id="productSelect" onchange="updateCustomers()">
-                <option value="">-- Select a Product --</option>
-                <!-- Options will be populated here -->
-            </select>
-            <div id="productCustomers" class="result"></div>
+
+        <!-- Wine Dashboard -->
+        <div id="wineDashboard">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search Customers or Products..." onkeyup="filterData()">
+            </div>
+            <div class="dropdown">
+                <label for="customerSelect">Select Customer:</label>
+                <select id="customerSelect" onchange="updateProducts()">
+                    <option value="">-- Select a Customer --</option>
+                    <!-- Options will be populated here -->
+                </select>
+                <div id="customerProducts" class="result"></div>
+            </div>
+            <div class="dropdown">
+                <label for="productSelect">Select Product:</label>
+                <select id="productSelect" onchange="updateCustomers()">
+                    <option value="">-- Select a Product --</option>
+                    <!-- Options will be populated here -->
+                </select>
+                <div id="productCustomers" class="result"></div>
+            </div>
+            <div class="product-details" id="productDetails">
+                <h2>Top 3 Products Purchased</h2>
+                <ul id="topProducts"></ul>
+            </div>
+            <div class="product-table">
+                <h2>All Purchases</h2>
+                <table id="purchaseTable">
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Product</th>
+                            <th>Product Code</th>
+                        </tr>
+                    </thead>
+                    <tbody id="purchaseBody">
+                        <!-- Purchase data will be populated here -->
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="product-details" id="productDetails">
-            <h2>Top 3 Products Purchased</h2>
-            <ul id="topProducts"></ul>
-        </div>
-        <div class="product-table">
-            <h2>All Purchases</h2>
-            <table id="purchaseTable">
-                <thead>
-                    <tr>
-                        <th>Customer</th>
-                        <th>Product</th>
-                        <th>Product Code</th>
-                    </tr>
-                </thead>
-                <tbody id="purchaseBody">
-                    <!-- Purchase data will be populated here -->
-                </tbody>
-            </table>
+
+        <!-- Coffee Dashboard -->
+        <div id="coffeeDashboard" class="hidden">
+            <div class="search-container">
+                <input type="text" id="coffeeSearchInput" placeholder="Search Coffee Customers..." onkeyup="filterCoffeeCustomers()">
+            </div>
+            <div class="dropdown">
+                <label for="machineSelect">Select Coffee Machine:</label>
+                <select id="machineSelect" onchange="updateCoffeeCustomers()">
+                    <option value="">-- Select a Coffee Machine --</option>
+                    <option value="A300 Franke Coffee Machine">A300 Franke Coffee Machine</option>
+                    <option value="A400 Franke Coffee Machine">A400 Franke Coffee Machine</option>
+                    <option value="S700 Coffee Machine">S700 Coffee Machine</option>
+                    <option value="Dalla Corte 'STUDIO' Espresso with Grinder">Dalla Corte 'STUDIO' Espresso with Grinder</option>
+                </select>
+                <div id="machineCustomers" class="result"></div>
+            </div>
+            <div class="product-details" id="machineDetails">
+                <h2>Customer Details</h2>
+                <ul id="customerDetails"></ul>
+            </div>
         </div>
     </div>
 
     <script>
-        // Mock data with product codes - replace this with your actual data
-        const data = [
+        // Password for accessing the dashboard
+        const correctPassword = "lawhillmate"; // Change this to your desired password
+
+        // Prompt for password on page load
+        const userPassword = prompt("Please enter the password to access the dashboard:");
+
+        if (userPassword === correctPassword) {
+            document.getElementById('dashboardContainer').style.display = 'flex'; // Show the dashboard
+        } else {
+            alert("Incorrect password. Access denied.");
+            document.body.innerHTML = "<h1 style='color: red; text-align: center;'>Access Denied</h1>"; // Show access denied message
+        }
+
+        // Mock data for customer purchases
+        const purchaseData = [
         { customer: "SOUTH SEAS CRUISES", product: "Sam Miranda Ballerina Moscato", code: "WAUSMBMOS010" },
 { customer: "SOUTH SEAS CRUISES", product: "Sam Miranda Cabernet Sauvignon", code: "WAUSMMRCAB010" },
 { customer: "SOUTH SEAS CRUISES", product: "Sam Miranda Shiraz", code: "WAUSMMRSHI010" },
@@ -380,9 +430,104 @@
 { customer: "Intercontinental Fiji Golf Resort & Spa", product: "Rymill 'The Yearling' Cab/Sauv", code: "WAURTYCABS010" }
         ];
 
-        const customers = [...new Set(data.map(item => item.customer))];
-        const products = [...new Set(data.map(item => item.product))];
+        // Mock data for coffee machines
+        const machineData = [
+        { code: "ZEQFK3400000176547", description: "A300 Franke Coffee Machine", customer: "Altitude Refrigeration Solutions Pte Ltd", type: "Free on Loan", amount: "-", spPerKg: "58.50" },
+{ code: "ZEQFK3400000176513", description: "A300 Franke Coffee Machine", customer: "Asco Motors", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176512", description: "A300 Franke Coffee Machine", customer: "Coral Coast Divers", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176544", description: "A300 Franke Coffee Machine", customer: "Damodar Labasa", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176536", description: "A300 Franke Coffee Machine", customer: "Damodar Townhouse", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176508", description: "A300 Franke Coffee Machine", customer: "Edge Resort", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
+{ code: "ZEQFK3400000176538", description: "A300 Franke Coffee Machine", customer: "Essity", type: "Purchased", amount: "-", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176518", description: "A300 Franke Coffee Machine", customer: "Fiji Police Force", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176519", description: "A300 Franke Coffee Machine", customer: "Grand Pacific Hotel", type: "Free on Loan", amount: "-", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176520", description: "A300 Franke Coffee Machine", customer: "Grand Pacific Hotel", type: "Free on Loan", amount: "-", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176529", description: "A300 Franke Coffee Machine", customer: "Holiday Inn", type: "Free on Loan", amount: "-", spPerKg: "58.50" },
+{ code: "ZEQFK3400000176533", description: "A300 Franke Coffee Machine", customer: "In Stock - Lami", type: "", amount: "-", spPerKg: "-" },
+{ code: "ZEQFK3400000176526", description: "A300 Franke Coffee Machine", customer: "Interlink Shipping", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176545", description: "A300 Franke Coffee Machine", customer: "Kokomo Island Resort", type: "Free on Loan", amount: "-", spPerKg: "46.50" },
+{ code: "ZEQFK3400000176521", description: "A300 Franke Coffee Machine", customer: "Laucala Island Resort Ltd", type: "Purchased", amount: "-", spPerKg: "62.00" },
+{ code: "ZEQFK3400000176535", description: "A300 Franke Coffee Machine", customer: "Laucala Island Resort Ltd", type: "Purchased", amount: "-", spPerKg: "62.00" },
+{ code: "ZEQFK3400000176541", description: "A300 Franke Coffee Machine", customer: "My Golden Spice Pte Ltd", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176515", description: "A300 Franke Coffee Machine", customer: "Nadi Warehouse", type: "", amount: "-", spPerKg: "-" },
+{ code: "ZEQFK3400000176523", description: "A300 Franke Coffee Machine", customer: "Nadi Warehouse", type: "", amount: "-", spPerKg: "-" },
+{ code: "ZEQFK3400000176524", description: "A300 Franke Coffee Machine", customer: "Nadi Warehouse", type: "", amount: "-", spPerKg: "-" },
+{ code: "ZEQFK3400000176543", description: "A300 Franke Coffee Machine", customer: "Nadi Warehouse", type: "", amount: "-", spPerKg: "-" },
+{ code: "ZEQFK3400000176537", description: "A300 Franke Coffee Machine", customer: "Nokonoko Investment", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176510", description: "A300 Franke Coffee Machine", customer: "PAT Consulting Pte Limited T/A TEMO Consulting", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176530", description: "A300 Franke Coffee Machine", customer: "Radisson", type: "Free on Loan", amount: "-", spPerKg: "46.00" },
+{ code: "ZEQFK3400000176506", description: "A300 Franke Coffee Machine", customer: "South Sea Cruises", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
+{ code: "ZEQFK3400000176514", description: "A300 Franke Coffee Machine", customer: "South Sea Cruises", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
+{ code: "ZEQFK3400000176539", description: "A300 Franke Coffee Machine", customer: "The Establishment", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176534", description: "A300 Franke Coffee Machine", customer: "The Hot Bread Kitchen - USP", type: "Rental", amount: "442.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176525", description: "A300 Franke Coffee Machine", customer: "Total - Laucala Beach", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176546", description: "A300 Franke Coffee Machine", customer: "Total - Nadi Backroad (Motorex Complex)", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176527", description: "A300 Franke Coffee Machine", customer: "Total - Navutu", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176542", description: "A300 Franke Coffee Machine", customer: "Total - Sigatoka", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176532", description: "A300 Franke Coffee Machine", customer: "Total Facilities Management", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176540", description: "A300 Franke Coffee Machine", customer: "Total Korovou", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176511", description: "A300 Franke Coffee Machine", customer: "TotalEnergies", type: "Purchased", amount: "-", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176516", description: "A300 Franke Coffee Machine", customer: "TotalEnergies", type: "Purchased", amount: "-", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176517", description: "A300 Franke Coffee Machine", customer: "TotalEnergies", type: "Purchased", amount: "-", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176507", description: "A300 Franke Coffee Machine", customer: "Twenty4Seven Service Station", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176522", description: "A300 Franke Coffee Machine", customer: "Village 4", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176509", description: "A300 Franke Coffee Machine", customer: "Westpac Bank", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176528", description: "A300 Franke Coffee Machine", customer: "Yatu Lau Company", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFK3400000176531", description: "A300 Franke Coffee Machine", customer: "Yatu Lau Company", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+{ code: "ZEQFKKA200002", description: "A400 Franke Coffee Machine", customer: "Anand & Prasad - Total Saweni", type: "Free on Loan", amount: "", spPerKg: "55.00" },
+  { code: "ZEQFK3400000008848", description: "A400 Franke Coffee Machine", customer: "Damodar Event Cinemas", type: "Free on Loan", amount: "", spPerKg: "55.00" },
+  { code: "ZEQFK3400000008841", description: "A400 Franke Coffee Machine", customer: "Edge Resort", type: "Free on Loan", amount: "", spPerKg: "62.00" },
+  { code: "ZEQFK3400000007095", description: "A400 Franke Coffee Machine", customer: "Epic", type: "Rental", amount: "273.00", spPerKg: "55.00" },
+  { code: "ZEQFK3400000007087", description: "A400 Franke Coffee Machine", customer: "Fijian Resort", type: "Free on Loan", amount: "", spPerKg: "55.00" },
+  { code: "ZEQFK3400000007090", description: "A400 Franke Coffee Machine", customer: "Fijian Resort", type: "Free on Loan", amount: "", spPerKg: "55.00" },
+  { code: "ZEQFK3400000008852", description: "A400 Franke Coffee Machine", customer: "Fijian Resort", type: "Free on Loan", amount: "", spPerKg: "55.00" },
+  { code: "ZEQFK3400000007091", description: "A400 Franke Coffee Machine", customer: "FNPF", type: "Rental", amount: "350.00", spPerKg: "55.00" },
+  { code: "ZEQFK3400000008844", description: "A400 Franke Coffee Machine", customer: "FNPF", type: "Rental", amount: "350.00", spPerKg: "55.00" },
+  { code: "ZEQFK3400000007092", description: "A400 Franke Coffee Machine", customer: "Grand Pacific Hotel", type: "Free on Loan", amount: "", spPerKg: "55.00" },
+  { code: "ZEQFK3400000008849", description: "A400 Franke Coffee Machine", customer: "HFC Bank Nadi", type: "Rental", amount: "350.00", spPerKg: "55.00" },
+  { code: "ZEQFK3400000007089", description: "A400 Franke Coffee Machine", customer: "HFC Bank Suva", type: "Rental", amount: "350.00", spPerKg: "55.00" },
+  { code: "ZEQFK3400000007088", description: "A400 Franke Coffee Machine", customer: "Holiday Inn", type: "Free on Loan", amount: "", spPerKg: "58.50" },
+  { code: "ZEQFK3400000007085", description: "A400 Franke Coffee Machine", customer: "Radisson", type: "Free on Loan", amount: "", spPerKg: "46.00" },
+  { code: "ZEQFK3400000007093", description: "A400 Franke Coffee Machine", customer: "Radisson", type: "Free on Loan", amount: "", spPerKg: "46.00" },
+  { code: "ZEQFK3400000008846", description: "A400 Franke Coffee Machine", customer: "Radisson", type: "Free on Loan", amount: "", spPerKg: "46.00" },
+  { code: "ZEQFK3400000008845", description: "A400 Franke Coffee Machine", customer: "South Seas", type: "Free on Loan", amount: "", spPerKg: "62.00" },
+  { code: "ZEQFK3400000008847", description: "A400 Franke Coffee Machine", customer: "The Hot Bread Kitchen - Damodar", type: "Rental", amount: "322.00", spPerKg: "55.00" },
+  { code: "ZEQFK3400000008843", description: "A400 Franke Coffee Machine", customer: "The Hot Bread Kitchen - Namaka", type: "Rental", amount: "322.00", spPerKg: "55.00" },
+  { code: "ZEQFK3400000007094", description: "A400 Franke Coffee Machine", customer: "Total - Flagstaff", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+  { code: "ZEQFK3400000007096", description: "A400 Franke Coffee Machine", customer: "Total Waila", type: "Rental", amount: "296.00", spPerKg: "55.00" },
+  { code: "ZEQFKKA200002", description: "A400 Franke Coffee Machine", customer: "Tradewinds Marine", type: "Purchased", amount: "", spPerKg: "55.00" },
+  { code: "ZEQFK3400000007086", description: "A400 Franke Coffee Machine", customer: "Village 6", type: "Free on Loan", amount: "", spPerKg: "55.00" },
+  { code: "ZEQFK147332", description: "S700 Coffee Machine", customer: "Nadi Stock", type: "", amount: "", spPerKg: "" },
+  { code: "ZEQFK3400000006823", description: "S700 Coffee Machine", customer: "Epic International Pte Ltd", type: "Rental", amount: "372.00", spPerKg: "" },
+  { code: "ZEQFK3400000006825", description: "S700 Coffee Machine", customer: "Lami Stock", type: "", amount: "", spPerKg: "" },
+  { code: "ZEQFK5150527130", description: "S700 Coffee Machine", customer: "Fijian Resort", type: "Free On Loan", amount: "", spPerKg: "" },
+  { code: "ZEQDCF22002110", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Fiji National University", type: "Purchased", amount: "", spPerKg: "55.00" },
+  { code: "ZEQDCF22002111", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Kokomo Island Resort", type: "Free on Loan", amount: "-", spPerKg: "46.50" },
+  { code: "ZEQDCF22002112", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
+  { code: "ZEQDCF22002113", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Mitchell Consultant Pte Ltd", type: "Rental", amount: "360", spPerKg: "55.00" },
+  { code: "ZEQDCF22002114", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
+  { code: "ZEQDCF22002115", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
+  { code: "ZEQDCF22002116", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Laucala Island Resort Ltd", type: "Purchased", amount: "-", spPerKg: "62.00" },
+  { code: "ZEQDCF22002117", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Amma Production", type: "Free on Loan", amount: "-", spPerKg: "55.00" },
+  { code: "ZEQDCF22002118", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
+  { code: "ZEQDCF22002119", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "The Foodie Diner", type: "Rental", amount: "360", spPerKg: "55.00" },
+  { code: "ZEQDCF22002120", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Fijian Resort", type: "Free on Loan", amount: "-", spPerKg: "55.00" },
+  { code: "ZEQDCF22002121", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
+  { code: "ZEQDCF22002122", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Captain's Cafe", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
+  { code: "ZEQDCF22002123", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
+  { code: "ZEQDCF22002124", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Lawhill Japan", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
+  { code: "ZEQDCF22002125", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Kokomo Island Resort", type: "Free on Loan", amount: "-", spPerKg: "46.50" },
+  { code: "ZEQDCF22002126", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Tokoriki Island Resort", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
+  { code: "ZEQDCF22002127", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Narayanganj Fiji Pte Ltd", type: "Rental", amount: "360", spPerKg: "55.00" },
+  { code: "ZEQDCF22002128", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Kokomo Island Resort", type: "Free on Loan", amount: "-", spPerKg: "46.50" },
+  { code: "ZEQDCF22002129", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" }
+        ];
 
+        // Customer and product data for purchase dashboard
+        const customers = [...new Set(purchaseData.map(item => item.customer))];
+        const products = [...new Set(purchaseData.map(item => item.product))];
+
+        // Populate customer dropdown for wine dashboard
         const customerSelect = document.getElementById('customerSelect');
         const productSelect = document.getElementById('productSelect');
         const customerProductsDiv = document.getElementById('customerProducts');
@@ -390,7 +535,6 @@
         const topProductsDiv = document.getElementById('topProducts');
         const purchaseBody = document.getElementById('purchaseBody');
 
-        // Populate customer dropdown
         customers.forEach(customer => {
             const option = document.createElement('option');
             option.value = customer;
@@ -398,7 +542,6 @@
             customerSelect.appendChild(option);
         });
 
-        // Populate product dropdown without showing product codes
         products.forEach(product => {
             const option = document.createElement('option');
             option.value = product;
@@ -409,7 +552,7 @@
         // Populate purchase table
         function populatePurchaseTable() {
             purchaseBody.innerHTML = ''; // Reset table display
-            data.forEach(item => {
+            purchaseData.forEach(item => {
                 const row = document.createElement('tr');
                 row.innerHTML = `<td>${item.customer}</td><td>${item.product}</td><td>${item.code}</td>`;
                 purchaseBody.appendChild(row);
@@ -422,7 +565,7 @@
             customerProductsDiv.innerHTML = ''; // Reset products display
 
             if (selectedCustomer) {
-                const customerProducts = data.filter(item => item.customer === selectedCustomer);
+                const customerProducts = purchaseData.filter(item => item.customer === selectedCustomer);
                 customerProductsDiv.innerHTML = '<strong>Purchased Products:</strong><br>';
                 customerProducts.forEach(item => {
                     customerProductsDiv.innerHTML += `<div class="product-item"><strong>${item.product}</strong></div>`; // Make product names bold
@@ -437,7 +580,7 @@
             productCustomersDiv.innerHTML = ''; // Reset customers display
 
             if (selectedProduct) {
-                const productCustomers = data.filter(item => item.product === selectedProduct);
+                const productCustomers = purchaseData.filter(item => item.product === selectedProduct);
                 productCustomersDiv.innerHTML = '<strong>Customers Who Bought This Product:</strong><br>';
                 productCustomers.forEach(item => {
                     productCustomersDiv.innerHTML += `<div class="product-item">${item.customer}</div>`;
@@ -449,7 +592,7 @@
         // Function to update the top 3 products purchased
         function updateTopProducts() {
             const productCounts = {};
-            data.forEach(item => {
+            purchaseData.forEach(item => {
                 productCounts[item.product] = (productCounts[item.product] || 0) + 1;
             });
 
@@ -483,6 +626,76 @@
                 option.textContent = product; // Only show product name
                 productSelect.appendChild(option);
             });
+        }
+
+        // Coffee Dashboard Functions
+        const machineSelect = document.getElementById('machineSelect');
+        const machineCustomersDiv = document.getElementById('machineCustomers');
+        const customerDetailsDiv = document.getElementById('customerDetails');
+
+        // Update customers based on selected machine
+        function updateCoffeeCustomers() {
+            const selectedMachine = machineSelect.value;
+            machineCustomersDiv.innerHTML = ''; // Reset customers display
+            customerDetailsDiv.innerHTML = ''; // Reset customer details display
+
+            if (selectedMachine) {
+                const machineCustomers = machineData.filter(item => item.description === selectedMachine);
+                machineCustomersDiv.innerHTML = '<strong>Customers for this Machine:</strong><br>';
+                machineCustomers.forEach(item => {
+                    machineCustomersDiv.innerHTML += `
+                        <div class="product-item">
+                            <strong>Customer Name:</strong> ${item.customer}<br>
+                            <strong>Coffee Machine:</strong> ${item.description}<br>
+                            <strong>Condition:</strong> ${item.type}<br>
+                            <strong>Price:</strong> ${item.amount}<br>
+                            <strong>Selling Price per Kilogram:</strong> ${item.spPerKg}
+                        </div>`;
+                });
+            }
+        }
+
+        // Function to filter coffee customers based on search input
+        function filterCoffeeCustomers() {
+            const searchValue = document.getElementById('coffeeSearchInput').value.toLowerCase();
+            const filteredCustomers = machineData.filter(item => item.customer.toLowerCase().includes(searchValue));
+
+            // Update machine customers display
+            const machineCustomersDiv = document.getElementById('machineCustomers');
+            machineCustomersDiv.innerHTML = ''; // Reset customers display
+
+            if (filteredCustomers.length > 0) {
+                machineCustomersDiv.innerHTML = '<strong>Filtered Customers:</strong><br>';
+                filteredCustomers.forEach(item => {
+                    machineCustomersDiv.innerHTML += `
+                        <div class="product-item">
+                            <strong>Customer Name:</strong> ${item.customer}<br>
+                            <strong>Coffee Machine:</strong> ${item.description}<br>
+                            <strong>Condition:</strong> ${item.type}<br>
+                            <strong>Price:</strong> ${item.amount}<br>
+                            <strong>Selling Price per Kilogram:</strong> ${item.spPerKg}
+                        </div>`;
+                });
+            } else {
+                machineCustomersDiv.innerHTML = '<strong>No customers found.</strong>';
+            }
+        }
+
+        // Toggle between Wine and Coffee dashboards
+        function toggleMenu() {
+            const menuSelect = document.getElementById('menuSelect').value;
+            const wineDashboard = document.getElementById('wineDashboard');
+            const coffeeDashboard = document.getElementById('coffeeDashboard');
+
+            if (menuSelect === 'wine') {
+                wineDashboard.classList.remove('hidden');
+                coffeeDashboard.classList.add('hidden');
+                populatePurchaseTable(); // Populate wine table
+            } else {
+                coffeeDashboard.classList.remove('hidden');
+                wineDashboard.classList.add('hidden');
+                // No need to populate machine table since it's not displayed
+            }
         }
 
         // Initial population of the purchase table
