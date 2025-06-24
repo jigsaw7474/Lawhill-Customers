@@ -507,96 +507,719 @@
             ];
 
             const machineData = [
-                { code: "ZEQFK3400000176547", description: "A300 Franke Coffee Machine", customer: "Altitude Refrigeration Solutions Pte Ltd", type: "Free on Loan", amount: "-", spPerKg: "58.50" },
-                { code: "ZEQFK3400000176513", description: "A300 Franke Coffee Machine", customer: "Asco Motors", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176512", description: "A300 Franke Coffee Machine", customer: "Coral Coast Divers", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176544", description: "A300 Franke Coffee Machine", customer: "Damodar Labasa", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176536", description: "A300 Franke Coffee Machine", customer: "Damodar Townhouse", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176508", description: "A300 Franke Coffee Machine", customer: "Edge Resort", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
-                { code: "ZEQFK3400000176538", description: "A300 Franke Coffee Machine", customer: "Essity", type: "Purchased", amount: "-", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176518", description: "A300 Franke Coffee Machine", customer: "Fiji Police Force", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176519", description: "A300 Franke Coffee Machine", customer: "Grand Pacific Hotel", type: "Free on Loan", amount: "-", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176520", description: "A300 Franke Coffee Machine", customer: "Grand Pacific Hotel", type: "Free on Loan", amount: "-", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176529", description: "A300 Franke Coffee Machine", customer: "Holiday Inn", type: "Free on Loan", amount: "-", spPerKg: "58.50" },
-                { code: "ZEQFK3400000176533", description: "A300 Franke Coffee Machine", customer: "In Stock - Lami", type: "", amount: "-", spPerKg: "-" },
-                { code: "ZEQFK3400000176526", description: "A300 Franke Coffee Machine", customer: "Interlink Shipping", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176545", description: "A300 Franke Coffee Machine", customer: "Kokomo Island Resort", type: "Free on Loan", amount: "-", spPerKg: "46.50" },
-                { code: "ZEQFK3400000176521", description: "A300 Franke Coffee Machine", customer: "Laucala Island Resort Ltd", type: "Purchased", amount: "-", spPerKg: "62.00" },
-                { code: "ZEQFK3400000176535", description: "A300 Franke Coffee Machine", customer: "Laucala Island Resort Ltd", type: "Purchased", amount: "-", spPerKg: "62.00" },
-                { code: "ZEQFK3400000176541", description: "A300 Franke Coffee Machine", customer: "My Golden Spice Pte Ltd", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176515", description: "A300 Franke Coffee Machine", customer: "Nadi Warehouse", type: "", amount: "-", spPerKg: "-" },
-                { code: "ZEQFK3400000176523", description: "A300 Franke Coffee Machine", customer: "Nadi Warehouse", type: "", amount: "-", spPerKg: "-" },
-                { code: "ZEQFK3400000176524", description: "A300 Franke Coffee Machine", customer: "Nadi Warehouse", type: "", amount: "-", spPerKg: "-" },
-                { code: "ZEQFK3400000176543", description: "A300 Franke Coffee Machine", customer: "Nadi Warehouse", type: "", amount: "-", spPerKg: "-" },
-                { code: "ZEQFK3400000176537", description: "A300 Franke Coffee Machine", customer: "Nokonoko Investment", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176510", description: "A300 Franke Coffee Machine", customer: "PAT Consulting Pte Limited T/A TEMO Consulting", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176530", description: "A300 Franke Coffee Machine", customer: "Radisson", type: "Free on Loan", amount: "-", spPerKg: "46.00" },
-                { code: "ZEQFK3400000176506", description: "A300 Franke Coffee Machine", customer: "South Sea Cruises", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
-                { code: "ZEQFK3400000176514", description: "A300 Franke Coffee Machine", customer: "South Sea Cruises", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
-                { code: "ZEQFK3400000176539", description: "A300 Franke Coffee Machine", customer: "The Establishment", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176534", description: "A300 Franke Coffee Machine", customer: "The Hot Bread Kitchen - USP", type: "Rental", amount: "442.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176525", description: "A300 Franke Coffee Machine", customer: "Total - Laucala Beach", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176546", description: "A300 Franke Coffee Machine", customer: "Total - Nadi Backroad (Motorex Complex)", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176527", description: "A300 Franke Coffee Machine", customer: "Total - Navutu", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176542", description: "A300 Franke Coffee Machine", customer: "Total - Sigatoka", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176532", description: "A300 Franke Coffee Machine", customer: "Total Facilities Management", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176540", description: "A300 Franke Coffee Machine", customer: "Total Korovou", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176511", description: "A300 Franke Coffee Machine", customer: "TotalEnergies", type: "Purchased", amount: "-", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176516", description: "A300 Franke Coffee Machine", customer: "TotalEnergies", type: "Purchased", amount: "-", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176517", description: "A300 Franke Coffee Machine", customer: "TotalEnergies", type: "Purchased", amount: "-", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176507", description: "A300 Franke Coffee Machine", customer: "Twenty4Seven Service Station", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176522", description: "A300 Franke Coffee Machine", customer: "Village 4", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176509", description: "A300 Franke Coffee Machine", customer: "Westpac Bank", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176528", description: "A300 Franke Coffee Machine", customer: "Yatu Lau Company", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000176531", description: "A300 Franke Coffee Machine", customer: "Yatu Lau Company", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFKKA200002", description: "A400 Franke Coffee Machine", customer: "Anand & Prasad - Total Saweni", type: "Free on Loan", amount: "", spPerKg: "55.00" },
-                { code: "ZEQFK3400000008848", description: "A400 Franke Coffee Machine", customer: "Damodar Event Cinemas", type: "Free on Loan", amount: "", spPerKg: "55.00" },
-                { code: "ZEQFK3400000008841", description: "A400 Franke Coffee Machine", customer: "Edge Resort", type: "Free on Loan", amount: "", spPerKg: "62.00" },
-                { code: "ZEQFK3400000007095", description: "A400 Franke Coffee Machine", customer: "Epic", type: "Rental", amount: "273.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000007087", description: "A400 Franke Coffee Machine", customer: "Fijian Resort", type: "Free on Loan", amount: "", spPerKg: "55.00" },
-                { code: "ZEQFK3400000007090", description: "A400 Franke Coffee Machine", customer: "Fijian Resort", type: "Free on Loan", amount: "", spPerKg: "55.00" },
-                { code: "ZEQFK3400000008852", description: "A400 Franke Coffee Machine", customer: "Fijian Resort", type: "Free on Loan", amount: "", spPerKg: "55.00" },
-                { code: "ZEQFK3400000007091", description: "A400 Franke Coffee Machine", customer: "FNPF", type: "Rental", amount: "350.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000008844", description: "A400 Franke Coffee Machine", customer: "FNPF", type: "Rental", amount: "350.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000007092", description: "A400 Franke Coffee Machine", customer: "Grand Pacific Hotel", type: "Free on Loan", amount: "", spPerKg: "55.00" },
-                { code: "ZEQFK3400000008849", description: "A400 Franke Coffee Machine", customer: "HFC Bank Nadi", type: "Rental", amount: "350.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000007089", description: "A400 Franke Coffee Machine", customer: "HFC Bank Suva", type: "Rental", amount: "350.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000007088", description: "A400 Franke Coffee Machine", customer: "Holiday Inn", type: "Free on Loan", amount: "", spPerKg: "58.50" },
-                { code: "ZEQFK3400000007085", description: "A400 Franke Coffee Machine", customer: "Radisson", type: "Free on Loan", amount: "", spPerKg: "46.00" },
-                { code: "ZEQFK3400000007093", description: "A400 Franke Coffee Machine", customer: "Radisson", type: "Free on Loan", amount: "", spPerKg: "46.00" },
-                { code: "ZEQFK3400000008846", description: "A400 Franke Coffee Machine", customer: "Radisson", type: "Free on Loan", amount: "", spPerKg: "46.00" },
-                { code: "ZEQFK3400000008845", description: "A400 Franke Coffee Machine", customer: "South Seas", type: "Free on Loan", amount: "", spPerKg: "62.00" },
-                { code: "ZEQFK3400000008847", description: "A400 Franke Coffee Machine", customer: "The Hot Bread Kitchen - Damodar", type: "Rental", amount: "322.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000008843", description: "A400 Franke Coffee Machine", customer: "The Hot Bread Kitchen - Namaka", type: "Rental", amount: "322.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000007094", description: "A400 Franke Coffee Machine", customer: "Total - Flagstaff", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-                { code: "ZEQFK3400000007096", description: "A400 Franke Coffee Machine", customer: "Total Waila", type: "Rental", amount: "296.00", spPerKg: "55.00" },
-                { code: "ZEQFKKA200002", description: "A400 Franke Coffee Machine", customer: "Tradewinds Marine", type: "Purchased", amount: "", spPerKg: "55.00" },
-                { code: "ZEQFK3400000007086", description: "A400 Franke Coffee Machine", customer: "Village 6", type: "Free on Loan", amount: "", spPerKg: "55.00" },
-                { code: "ZEQFK147332", description: "S700 Coffee Machine", customer: "Nadi Stock", type: "", amount: "", spPerKg: "" },
-                { code: "ZEQFK3400000006823", description: "S700 Coffee Machine", customer: "Epic International Pte Ltd", type: "Rental", amount: "372.00", spPerKg: "" },
-                { code: "ZEQFK3400000006825", description: "S700 Coffee Machine", customer: "Lami Stock", type: "", amount: "", spPerKg: "" },
-                { code: "ZEQFK5150527130", description: "S700 Coffee Machine", customer: "Fijian Resort", type: "Free On Loan", amount: "", spPerKg: "" },
-                { code: "ZEQDCF22002110", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Fiji National University", type: "Purchased", amount: "", spPerKg: "55.00" },
-                { code: "ZEQDCF22002111", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Kokomo Island Resort", type: "Free on Loan", amount: "-", spPerKg: "46.50" },
-                { code: "ZEQDCF22002112", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
-                { code: "ZEQDCF22002113", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Mitchell Consultant Pte Ltd", type: "Rental", amount: "360", spPerKg: "55.00" },
-                { code: "ZEQDCF22002114", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
-                { code: "ZEQDCF22002115", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
-                { code: "ZEQDCF22002116", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Laucala Island Resort Ltd", type: "Purchased", amount: "-", spPerKg: "62.00" },
-                { code: "ZEQDCF22002117", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Amma Production", type: "Free on Loan", amount: "-", spPerKg: "55.00" },
-                { code: "ZEQDCF22002118", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
-                { code: "ZEQDCF22002119", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "The Foodie Diner", type: "Rental", amount: "360", spPerKg: "55.00" },
-                { code: "ZEQDCF22002120", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Fijian Resort", type: "Free on Loan", amount: "-", spPerKg: "55.00" },
-                { code: "ZEQDCF22002121", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
-                { code: "ZEQDCF22002122", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Captain's Cafe", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
-                { code: "ZEQDCF22002123", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
-                { code: "ZEQDCF22002124", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Lawhill Japan", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
-                { code: "ZEQDCF22002125", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Kokomo Island Resort", type: "Free on Loan", amount: "-", spPerKg: "46.50" },
-                { code: "ZEQDCF22002126", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Tokoriki Island Resort", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
-                { code: "ZEQDCF22002127", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Narayanganj Fiji Pte Ltd", type: "Rental", amount: "360", spPerKg: "55.00" },
-                { code: "ZEQDCF22002128", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Kokomo Island Resort", type: "Free on Loan", amount: "-", spPerKg: "46.50" },
-                { code: "ZEQDCF22002129", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" }
-            ];
+    {
+        "code": "ZEQFK3400000176547",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Altitude Refrigeration Solutions Pte Ltd",
+        "type": "Free on Loan ",
+        "amount": 0.0,
+        "spPerKg": 58.5
+    },
+    {
+        "code": "ZEQFK3400000176513",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Asco Motors",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176512",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Coral Coast Divers",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176544",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Damodar Labasa",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176536",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Damodar Townhouse",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176508",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Edge Resort",
+        "type": "Free on Loan",
+        "amount": 0.0,
+        "spPerKg": 62.0
+    },
+    {
+        "code": "ZEQFK3400000176538",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Essity",
+        "type": "Purchased",
+        "amount": 0.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176518",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Fiji Police Force",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176519",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Grand Pacific Hotel",
+        "type": "Free on Loan ",
+        "amount": 0.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176520",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Grand Pacific Hotel",
+        "type": "Free on Loan ",
+        "amount": 0.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176529",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Holiday Inn",
+        "type": "Free on Loan ",
+        "amount": 0.0,
+        "spPerKg": 58.5
+    },
+    {
+        "code": "ZEQFK3400000176533",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "In Stock - Lami",
+        "type": "",
+        "amount": 0.0,
+        "spPerKg": 0.0
+    },
+    {
+        "code": "ZEQFK3400000176526",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Interlink Shipping",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176545",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Kokomo Island Resort",
+        "type": "Free on Loan ",
+        "amount": 0.0,
+        "spPerKg": 46.5
+    },
+    {
+        "code": "ZEQFK3400000176521",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Laucala Island Resort Ltd",
+        "type": "Purchased",
+        "amount": 0.0,
+        "spPerKg": 62.0
+    },
+    {
+        "code": "ZEQFK3400000176535",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Laucala Island Resort Ltd",
+        "type": "Purchased",
+        "amount": 0.0,
+        "spPerKg": 62.0
+    },
+    {
+        "code": "ZEQFK3400000176541",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "My Golden Spice Pte Ltd",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176515",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Radisson",
+        "type": "Free on Loan",
+        "amount": 0.0,
+        "spPerKg": 0.0
+    },
+    {
+        "code": "ZEQFK3400000176523",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Epic",
+        "type": "Rental",
+        "amount": 273.0,
+        "spPerKg": 0.0
+    },
+    {
+        "code": "ZEQFK3400000176524",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Nadi Warehouse",
+        "type": "",
+        "amount": 0.0,
+        "spPerKg": 0.0
+    },
+    {
+        "code": "ZEQFK3400000176543",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Nadi Warehouse",
+        "type": "",
+        "amount": 0.0,
+        "spPerKg": 0.0
+    },
+    {
+        "code": "ZEQFK3400000176537",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Nokonoko Investment",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176510",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "PAT Consulting Pte Limited T/A TEMO Consulting",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176530",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Radisson",
+        "type": "Free on Loan ",
+        "amount": 0.0,
+        "spPerKg": 46.0
+    },
+    {
+        "code": "ZEQFK3400000176506",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "South Sea Cruises",
+        "type": "Free on Loan ",
+        "amount": 0.0,
+        "spPerKg": 62.0
+    },
+    {
+        "code": "ZEQFK3400000176514",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "South Sea Cruises",
+        "type": "Free on Loan",
+        "amount": 0.0,
+        "spPerKg": 62.0
+    },
+    {
+        "code": "ZEQFK3400000176539",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "The Establishment",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176534",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Lami Cellar",
+        "type": "",
+        "amount": 0.0,
+        "spPerKg": 0.0
+    },
+    {
+        "code": "ZEQFK3400000176525",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Total - Laucala Beach",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176546",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Total - Nadi Backroad (Motorex Complex)",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176527",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Total - Navutu",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176542",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Total - Sigatoka",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176532",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Total Facilities Management",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176540",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Total Korovou",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176511",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "TotalEnergies",
+        "type": "Purchased",
+        "amount": 0.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176516",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "TotalEnergies",
+        "type": "Purchased",
+        "amount": 0.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176517",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "TotalEnergies",
+        "type": "Purchased",
+        "amount": 0.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176507",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Twenty4Seven Service Station",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176522",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "HFC Bank",
+        "type": "Rental",
+        "amount": 350.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176509",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Westpac Bank",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176528",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Yatu Lau Company ",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000176531",
+        "Description": "A300 Franke Coffee Machine",
+        "customer": "Yatu Lau Company ",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFKKA200002",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "Anand & Prasad - Total Saweni",
+        "type": "Free on Loan",
+        "amount": "",
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000008848",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "Damodar Event Cinemas",
+        "type": "Free on Loan",
+        "amount": "",
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000008841",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "Edge Resort",
+        "type": "Free on Loan",
+        "amount": "",
+        "spPerKg": 62.0
+    },
+    {
+        "code": "ZEQFK3400000007095",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "Epic",
+        "type": "Rental",
+        "amount": 273.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000007087",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "Fijian Resort",
+        "type": "Free on Loan",
+        "amount": "",
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000007090",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "Fijian Resort",
+        "type": "Free on Loan",
+        "amount": "",
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000008852",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "Fijian Resort",
+        "type": "Free on Loan",
+        "amount": "",
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000007091",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "FNPF",
+        "type": "Rental",
+        "amount": 350.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000008844",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "FNPF",
+        "type": "Rental",
+        "amount": 350.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000007092",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "Grand Pacific Hotel",
+        "type": "Free on Loan",
+        "amount": "",
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000008849",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "HFC Bank Nadi",
+        "type": "Rental",
+        "amount": 350.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000007089",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "HFC Bank Suva",
+        "type": "Rental",
+        "amount": 350.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000007088",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "Holiday Inn",
+        "type": "Free on Loan",
+        "amount": "",
+        "spPerKg": 58.5
+    },
+    {
+        "code": "ZEQFK3400000007085",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "Radisson",
+        "type": "Free on Loan",
+        "amount": "",
+        "spPerKg": 46.0
+    },
+    {
+        "code": "ZEQFK3400000007093",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "Radisson",
+        "type": "Free on Loan",
+        "amount": "",
+        "spPerKg": 46.0
+    },
+    {
+        "code": "ZEQFK3400000008846",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "Radisson",
+        "type": "Free on Loan",
+        "amount": "",
+        "spPerKg": 46.0
+    },
+    {
+        "code": "ZEQFK3400000008845",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "South Seas",
+        "type": "Free on Loan",
+        "amount": "",
+        "spPerKg": 62.0
+    },
+    {
+        "code": "ZEQFK3400000008847",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "The Hot Bread Kitchen - Damodar",
+        "type": "Rental",
+        "amount": 322.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000008843",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "The Hot Bread Kitchen - Namaka",
+        "type": "Rental",
+        "amount": 322.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000007094",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "Total - Flagstaff",
+        "type": "Rental",
+        "amount": 400.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000007096",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "Total Waila",
+        "type": "Rental",
+        "amount": 296.0,
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFKKA200002",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "Tradewinds Marine",
+        "type": "Purchased",
+        "amount": "",
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK3400000007086",
+        "Description": "A400 Franke Coffee Machine",
+        "customer": "Village 6",
+        "type": "Free on Loan",
+        "amount": "",
+        "spPerKg": 55.0
+    },
+    {
+        "code": "ZEQFK147332",
+        "Description": "S700 Coffee Machine",
+        "customer": "Nadi Stock",
+        "type": "",
+        "amount": "",
+        "spPerKg": ""
+    },
+    {
+        "code": "ZEQFK3400000006823",
+        "Description": "S700 Coffee Machine",
+        "customer": "Epic International Pte Ltd",
+        "type": "Rental",
+        "amount": 372.0,
+        "spPerKg": ""
+    },
+    {
+        "code": "ZEQFK3400000006825",
+        "Description": "S700 Coffee Machine",
+        "customer": "Lami Stock",
+        "type": "",
+        "amount": "",
+        "spPerKg": ""
+    },
+    {
+        "code": "ZEQFK5150527130",
+        "Description": "S700 Coffee Machine",
+        "customer": "Fijian Resort",
+        "type": "Free On Loan",
+        "amount": "",
+        "spPerKg": ""
+    },
+    {
+        "code": "ZEQDCF22002110",
+        "Description": "Dalla Corte 'STUDIO' Espresso with Grinder",
+        "customer": "Fiji National University",
+        "type": "Purchased",
+        "amount": "",
+        "spPerKg": "55.00"
+    },
+    {
+        "code": "ZEQDCF22002111",
+        "Description": "Dalla Corte 'STUDIO' Espresso with Grinder",
+        "customer": "Kokomo Island Resort",
+        "type": "Free on Loan",
+        "amount": "-",
+        "spPerKg": "46.50"
+    },
+    {
+        "code": "ZEQDCF22002112",
+        "Description": "Dalla Corte 'STUDIO' Espresso with Grinder",
+        "customer": "Stock",
+        "type": "Stock",
+        "amount": "-",
+        "spPerKg": "-"
+    },
+    {
+        "code": "ZEQDCF22002113",
+        "Description": "Dalla Corte 'STUDIO' Espresso with Grinder",
+        "customer": "Mitchell Consultant Pte Ltd",
+        "type": "Rental",
+        "amount": "360",
+        "spPerKg": "55.00"
+    },
+    {
+        "code": "ZEQDCF22002114",
+        "Description": "Dalla Corte 'STUDIO' Espresso with Grinder",
+        "customer": "Stock",
+        "type": "Stock",
+        "amount": "-",
+        "spPerKg": "-"
+    },
+    {
+        "code": "ZEQDCF22002115",
+        "Description": "Dalla Corte 'STUDIO' Espresso with Grinder",
+        "customer": "Stock",
+        "type": "Stock",
+        "amount": "-",
+        "spPerKg": "-"
+    },
+    {
+        "code": "ZEQDCF22002116",
+        "Description": "Dalla Corte 'STUDIO' Espresso with Grinder",
+        "customer": "Laucala Island Resort Ltd",
+        "type": "Purchased",
+        "amount": "-",
+        "spPerKg": "62.00"
+    },
+    {
+        "code": "ZEQDCF22002117",
+        "Description": "Dalla Corte 'STUDIO' Espresso with Grinder",
+        "customer": "Amma Production",
+        "type": "Free on Loan",
+        "amount": "-",
+        "spPerKg": "55.00"
+    },
+    {
+        "code": "ZEQDCF22002118",
+        "Description": "Dalla Corte 'STUDIO' Espresso with Grinder",
+        "customer": "Stock",
+        "type": "Stock",
+        "amount": "-",
+        "spPerKg": "-"
+    },
+    {
+        "code": "ZEQDCF22002119",
+        "Description": "Dalla Corte 'STUDIO' Espresso with Grinder",
+        "customer": "The Foodie Diner",
+        "type": "Rental",
+        "amount": "360",
+        "spPerKg": "55.00"
+    },
+    {
+        "code": "ZEQDCF22002120",
+        "Description": "Dalla Corte 'STUDIO' Espresso with Grinder",
+        "customer": "Fijian Resort",
+        "type": "Free on Loan",
+        "amount": "-",
+        "spPerKg": "55.00"
+    },
+    {
+        "code": "ZEQDCF22002121",
+        "Description": "Dalla Corte 'STUDIO' Espresso with Grinder",
+        "customer": "Stock",
+        "type": "Stock",
+        "amount": "-",
+        "spPerKg": "-"
+    },
+    {
+        "code": "ZEQDCF22002122",
+        "Description": "Dalla Corte 'STUDIO' Espresso with Grinder",
+        "customer": "Captain's Cafe",
+        "type": "Free on Loan",
+        "amount": "-",
+        "spPerKg": "62.00"
+    },
+    {
+        "code": "ZEQDCF22002123",
+        "Description": "Dalla Corte 'STUDIO' Espresso with Grinder",
+        "customer": "Stock",
+        "type": "Stock",
+        "amount": "-",
+        "spPerKg": "-"
+    },
+    {
+        "code": "ZEQDCF22002124",
+        "Description": "Dalla Corte 'STUDIO' Espresso with Grinder",
+        "customer": "Lawhill Japan",
+        "type": "Free on Loan",
+        "amount": "-",
+        "spPerKg": "62.00"
+    },
+    {
+        "code": "ZEQDCF22002125",
+        "Description": "Dalla Corte 'STUDIO' Espresso with Grinder",
+        "customer": "Kokomo Island Resort",
+        "type": "Free on Loan",
+        "amount": "-",
+        "spPerKg": "46.50"
+    },
+    {
+        "code": "ZEQDCF22002126",
+        "Description": "Dalla Corte 'STUDIO' Espresso with Grinder",
+        "customer": "Tokoriki Island Resort",
+        "type": "Free on Loan",
+        "amount": "-",
+        "spPerKg": "62.00"
+    },
+    {
+        "code": "ZEQDCF22002127",
+        "Description": "Dalla Corte 'STUDIO' Espresso with Grinder",
+        "customer": "Narayanganj Fiji Pte Ltd",
+        "type": "Rental",
+        "amount": "360",
+        "spPerKg": "55.00"
+    },
+    {
+        "code": "ZEQDCF22002128",
+        "Description": "Dalla Corte 'STUDIO' Espresso with Grinder",
+        "customer": "Kokomo Island Resort",
+        "type": "Free on Loan",
+        "amount": "-",
+        "spPerKg": "46.50"
+    },
+    {
+        "code": "ZEQDCF22002129",
+        "Description": "Dalla Corte 'STUDIO' Espresso with Grinder",
+        "customer": "Stock",
+        "type": "Stock",
+        "amount": "-",
+        "spPerKg": "-"
+    }
+];
 
             // --- UI ELEMENTS ---
             const wineTab = document.getElementById('wineTab');
@@ -730,14 +1353,18 @@
             }
             
             // --- COFFEE DASHBOARD LOGIC ---
-            const machines = [...new Set(machineData.map(item => item.description))].sort();
+            const machines = [...new Set(machineData.map(item => item.Description))].sort();
 
             function populateCoffeeDropdowns() {
+                // Clear existing options except the first one
+                machineSelect.innerHTML = '<option value="">-- Select a Machine --</option>';
                 machines.forEach(machine => {
-                    const option = document.createElement('option');
-                    option.value = machine;
-                    option.textContent = machine;
-                    machineSelect.appendChild(option);
+                    if(machine) { // Ensure we don't add an empty option
+                        const option = document.createElement('option');
+                        option.value = machine;
+                        option.textContent = machine;
+                        machineSelect.appendChild(option);
+                    }
                 });
             }
 
@@ -746,13 +1373,13 @@
                 machineCustomersDiv.innerHTML = '';
 
                 if (selectedMachine) {
-                    const machineCustomers = machineData.filter(item => item.description === selectedMachine);
+                    const machineCustomers = machineData.filter(item => item.Description === selectedMachine);
                     machineCustomers.forEach(item => {
                         const div = document.createElement('div');
                         div.className = 'result-item';
                         div.innerHTML = `
                             <p class="font-bold text-lg text-gray-800">${item.customer}</p>
-                            <div class="text-sm text-gray-600 grid grid-cols-2 gap-x-4 mt-2">
+                            <div class="text-sm text-gray-600 grid grid-cols-1 sm:grid-cols-2 gap-x-4 mt-2">
                                 <p><strong>Condition:</strong> <span class="font-medium text-gray-800">${item.type || 'N/A'}</span></p>
                                 <p><strong>Price:</strong> <span class="font-medium text-gray-800">${item.amount || 'N/A'}</span></p>
                                 <p><strong>SP per Kg:</strong> <span class="font-medium text-gray-800">${item.spPerKg || 'N/A'}</span></p>
@@ -768,7 +1395,7 @@
 
             function filterCoffeeCustomers() {
                 const searchValue = document.getElementById('coffeeSearchInput').value.toLowerCase();
-                const filteredCustomers = machineData.filter(item => item.customer.toLowerCase().includes(searchValue));
+                const filteredCustomers = machineData.filter(item => item.customer && item.customer.toLowerCase().includes(searchValue));
                 
                 machineCustomersDiv.innerHTML = '';
                 
@@ -778,8 +1405,8 @@
                         div.className = 'result-item';
                         div.innerHTML = `
                             <p class="font-bold text-lg text-gray-800">${item.customer}</p>
-                            <div class="text-sm text-gray-600 grid grid-cols-2 gap-x-4 mt-2">
-                                <p><strong>Machine:</strong> <span class="font-medium text-gray-800">${item.description}</span></p>
+                            <div class="text-sm text-gray-600 grid grid-cols-1 sm:grid-cols-2 gap-x-4 mt-2">
+                                <p><strong>Machine:</strong> <span class="font-medium text-gray-800">${item.Description}</span></p>
                                 <p><strong>Condition:</strong> <span class="font-medium text-gray-800">${item.type || 'N/A'}</span></p>
                                 <p><strong>Price:</strong> <span class="font-medium text-gray-800">${item.amount || 'N/A'}</span></p>
                                 <p><strong>SP per Kg:</strong> <span class="font-medium text-gray-800">${item.spPerKg || 'N/A'}</span></p>
