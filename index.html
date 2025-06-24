@@ -3,704 +3,808 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lawhill Wines Customer Details</title>
+    <title>Lawhill Customer Dashboard</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
         body {
-            background-color: #121212;
-            color: #e0e0e0;
-            font-family: 'Century Gothic', sans-serif;
-            margin: 0;
-            padding: 20px;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
         }
-        h1 {
-            color: #ff6f61;
-            text-align: center;
+
+        /* --- Password Modal --- */
+        #passwordModal {
+            background-color: rgba(0, 0, 0, 0.6);
+            transition: opacity 0.3s ease;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            display: none; /* Hide the container initially */
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
+
+        #passwordModal .modal-content {
+            animation: slideIn 0.4s ease-out;
         }
-        .dropdown {
-            width: 100%;
-            background-color: #1e1e1e;
-            padding: 20px;
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* --- Main App Styling --- */
+        .app-container {
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* --- General Card Styling --- */
+        .card {
+            background-color: #ffffff;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            margin-bottom: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.07);
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        select {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #424242;
-            border-radius: 6px;
-            background-color: #333;
-            color: #e0e0e0;
-            font-size: 16px;
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
         }
-        .result {
-            margin-top: 10px;
-            background-color: #2a2a2a;
-            padding: 15px;
-            border-radius: 8px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
+
+        .card-header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1rem;
+            color: #1e3a8a; /* Dark blue */
         }
-        .product-details {
-            width: 100%;
-            background-color: #1e1e1e;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+
+        /* --- Tab Navigation --- */
+        .tab-button {
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
         }
-        .product-item {
-            margin: 5px 0;
-            padding: 5px;
-            border-bottom: 1px solid #424242;
-            width: 100%;
+
+        .tab-button.active {
+            color: #2563eb; /* Primary blue */
+            border-bottom-color: #2563eb;
         }
-        .search-container {
-            width: 100%;
-            margin-bottom: 20px;
+
+        .tab-button:not(.active):hover {
+            color: #60a5fa; /* Lighter blue on hover */
         }
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #424242;
-            border-radius: 6px;
-            background-color: #333;
-            color: #e0e0e0;
-            font-size: 16px;
+
+        /* --- Form Elements --- */
+        .form-input, .form-select {
+            border: 1px solid #cbd5e1;
+            background-color: #f8fafc;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+        .form-input:focus, .form-select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+            outline: none;
         }
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #424242;
+
+        /* --- Content sections --- */
+        .content-section {
+            display: none; /* Hidden by default */
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- Results & Tables --- */
+        .result-item {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 0.75rem 0;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        .table-responsive {
+            overflow-x: auto;
         }
         th {
-            background-color: #1e1e1e;
-        }
-        tr:hover {
-            background-color: #333;
-        }
-        .hidden {
-            display: none;
+            background-color: #f1f5f9;
         }
     </style>
 </head>
-<body>
+<body class="bg-gray-100">
 
-    <h1>Lawhill Wines Customer Details</h1>
-    <div class="container" id="dashboardContainer">
-        <!-- Menu Selection -->
-        <div class="dropdown">
-            <label for="menuSelect">Select Menu:</label>
-            <select id="menuSelect" onchange="toggleMenu()">
-                <option value="wine">Wine Menu</option>
-                <option value="coffee">Coffee Menu</option>
-            </select>
-        </div>
-
-        <!-- Wine Dashboard -->
-        <div id="wineDashboard">
-            <div class="search-container">
-                <input type="text" id="searchInput" placeholder="Search Customers or Products..." onkeyup="filterData()">
-            </div>
-            <div class="dropdown">
-                <label for="customerSelect">Select Customer:</label>
-                <select id="customerSelect" onchange="updateProducts()">
-                    <option value="">-- Select a Customer --</option>
-                    <!-- Options will be populated here -->
-                </select>
-                <div id="customerProducts" class="result"></div>
-            </div>
-            <div class="dropdown">
-                <label for="productSelect">Select Product:</label>
-                <select id="productSelect" onchange="updateCustomers()">
-                    <option value="">-- Select a Product --</option>
-                    <!-- Options will be populated here -->
-                </select>
-                <div id="productCustomers" class="result"></div>
-            </div>
-            <div class="product-details" id="productDetails">
-                <h2>Top 3 Products Purchased</h2>
-                <ul id="topProducts"></ul>
-            </div>
-            <div class="product-table">
-                <h2>All Purchases</h2>
-                <table id="purchaseTable">
-                    <thead>
-                        <tr>
-                            <th>Customer</th>
-                            <th>Product</th>
-                            <th>Product Code</th>
-                        </tr>
-                    </thead>
-                    <tbody id="purchaseBody">
-                        <!-- Purchase data will be populated here -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Coffee Dashboard -->
-        <div id="coffeeDashboard" class="hidden">
-            <div class="search-container">
-                <input type="text" id="coffeeSearchInput" placeholder="Search Coffee Customers..." onkeyup="filterCoffeeCustomers()">
-            </div>
-            <div class="dropdown">
-                <label for="machineSelect">Select Coffee Machine:</label>
-                <select id="machineSelect" onchange="updateCoffeeCustomers()">
-                    <option value="">-- Select a Coffee Machine --</option>
-                    <option value="A300 Franke Coffee Machine">A300 Franke Coffee Machine</option>
-                    <option value="A400 Franke Coffee Machine">A400 Franke Coffee Machine</option>
-                    <option value="S700 Coffee Machine">S700 Coffee Machine</option>
-                    <option value="Dalla Corte 'STUDIO' Espresso with Grinder">Dalla Corte 'STUDIO' Espresso with Grinder</option>
-                </select>
-                <div id="machineCustomers" class="result"></div>
-            </div>
-            <div class="product-details" id="machineDetails">
-                <h2>Customer Details</h2>
-                <ul id="customerDetails"></ul>
-            </div>
+    <!-- Password Modal -->
+    <div id="passwordModal" class="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="modal-content bg-white w-full max-w-md p-6 rounded-xl shadow-2xl">
+            <h2 class="text-2xl font-bold text-gray-800 text-center mb-4">Access Dashboard</h2>
+            <p class="text-center text-gray-600 mb-6">Please enter the password to continue.</p>
+            <input type="password" id="passwordInput" class="form-input w-full p-3 text-center text-lg rounded-lg mb-4" placeholder="••••••••">
+            <button id="submitPassword" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg hover:bg-blue-700 transition-colors">
+                Enter
+            </button>
+            <p id="passwordError" class="text-red-500 text-center mt-3 hidden">Incorrect password. Access denied.</p>
         </div>
     </div>
 
+    <!-- Main Application Container -->
+    <div id="appContainer" class="app-container container mx-auto p-4 md:p-8">
+        
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-gray-800">Lawhill Customer Dashboard</h1>
+            <p class="text-lg text-gray-600 mt-2">Wine & Coffee Division</p>
+        </header>
+
+        <!-- Tab Navigation -->
+        <div class="flex justify-center border-b border-gray-300 mb-8">
+            <button id="wineTab" class="tab-button text-lg font-semibold px-6 py-3 active">
+                <i class="fas fa-wine-glass-alt mr-2"></i> Wine Menu
+            </button>
+            <button id="coffeeTab" class="tab-button text-lg font-semibold px-6 py-3">
+                <i class="fas fa-coffee mr-2"></i> Coffee Menu
+            </button>
+        </div>
+
+        <!-- Wine Dashboard Content -->
+        <div id="wineDashboard" class="content-section active">
+            <div class="card mb-8">
+                <input type="text" id="searchInput" placeholder="Search Customers or Products..." class="form-input w-full p-3 rounded-lg" onkeyup="filterData()">
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Customer Selection -->
+                <div class="card md:col-span-1 lg:col-span-1">
+                    <h2 class="card-header text-xl font-bold">Select Customer</h2>
+                    <select id="customerSelect" class="form-select w-full p-2 rounded-md" onchange="updateProducts()">
+                        <option value="">-- Select a Customer --</option>
+                    </select>
+                    <div id="customerProducts" class="mt-4 text-gray-700 space-y-2"></div>
+                </div>
+
+                <!-- Product Selection -->
+                <div class="card md:col-span-1 lg:col-span-1">
+                    <h2 class="card-header text-xl font-bold">Select Product</h2>
+                    <select id="productSelect" class="form-select w-full p-2 rounded-md" onchange="updateCustomers()">
+                        <option value="">-- Select a Product --</option>
+                    </select>
+                    <div id="productCustomers" class="mt-4 text-gray-700 space-y-2"></div>
+                </div>
+                
+                <!-- Top Products -->
+                <div class="card md:col-span-2 lg:col-span-1">
+                    <h2 class="card-header text-xl font-bold">Top 3 Products</h2>
+                    <ul id="topProducts" class="text-gray-700 list-disc list-inside space-y-2"></ul>
+                </div>
+            </div>
+
+            <!-- All Purchases Table -->
+            <div class="card mt-8">
+                <h2 class="card-header text-xl font-bold">All Purchases</h2>
+                <div class="table-responsive">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr>
+                                <th class="p-3">Customer</th>
+                                <th class="p-3">Product</th>
+                                <th class="p-3">Product Code</th>
+                            </tr>
+                        </thead>
+                        <tbody id="purchaseBody" class="divide-y divide-gray-200">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coffee Dashboard Content -->
+        <div id="coffeeDashboard" class="content-section">
+             <div class="card mb-8">
+                <input type="text" id="coffeeSearchInput" placeholder="Search Coffee Customers..." class="form-input w-full p-3 rounded-lg" onkeyup="filterCoffeeCustomers()">
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="card md:col-span-1">
+                    <h2 class="card-header text-xl font-bold">Select Coffee Machine</h2>
+                    <select id="machineSelect" class="form-select w-full p-2 rounded-md" onchange="updateCoffeeCustomers()">
+                        <option value="">-- Select a Machine --</option>
+                    </select>
+                </div>
+                <div id="machineCustomers" class="card md:col-span-2 space-y-4">
+                     <p class="text-gray-500">Select a machine to see customer details.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
     <script>
-        // Password for accessing the dashboard
-        const correctPassword = "lawhillmate"; // Change this to your desired password
+        document.addEventListener('DOMContentLoaded', () => {
 
-        // Prompt for password on page load
-        const userPassword = prompt("Please enter the password to access the dashboard:");
+            // --- PASSWORD AUTHENTICATION ---
+            const correctPassword = "lawhillmate";
+            const passwordModal = document.getElementById('passwordModal');
+            const passwordInput = document.getElementById('passwordInput');
+            const submitPasswordBtn = document.getElementById('submitPassword');
+            const passwordError = document.getElementById('passwordError');
+            const appContainer = document.getElementById('appContainer');
 
-        if (userPassword === correctPassword) {
-            document.getElementById('dashboardContainer').style.display = 'flex'; // Show the dashboard
-        } else {
-            alert("Incorrect password. Access denied.");
-            document.body.innerHTML = "<h1 style='color: red; text-align: center;'>Access Denied</h1>"; // Show access denied message
-        }
-
-        // Mock data for customer purchases
-        const purchaseData = [
-        { customer: "SOUTH SEAS CRUISES", product: "Sam Miranda Ballerina Moscato", code: "WAUSMBMOS010" },
-{ customer: "SOUTH SEAS CRUISES", product: "Sam Miranda Cabernet Sauvignon", code: "WAUSMMRCAB010" },
-{ customer: "SOUTH SEAS CRUISES", product: "Sam Miranda Shiraz", code: "WAUSMMRSHI010" },
-{ customer: "SOUTH SEAS CRUISES", product: "Underline Shiraz", code: "WAUUNLNSHI010" },
-{ customer: "SOUTH SEAS CRUISES", product: "Underline Semillion/Sauv Blanc", code: "WAUUNLSSB010" },
-{ customer: "SOUTH SEAS CRUISES", product: "Poker Face Chardonnay", code: "WAUWEPFCHD010" },
-{ customer: "SOUTH SEAS CRUISES", product: "Poker Face Shiraz", code: "WAUWEPFSHI010" },
-{ customer: "SOUTH SEAS CRUISES", product: "Richland Chardonnay", code: "WAUWERCHD010" },
-{ customer: "SOUTH SEAS CRUISES", product: "Richland Shiraz", code: "WAUWERSHI010" },
-{ customer: "SOUTH SEAS CRUISES", product: "Baron D'Arignac Red", code: "WFR645014" },
-{ customer: "SOUTH SEAS CRUISES", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
-{ customer: "SOUTH SEAS CRUISES", product: "Charton Blanc de Blancs Brut", code: "WFRLGCVCB010" },
-{ customer: "SOUTH SEAS CRUISES", product: "Grandial Blanc de Blancs Brut", code: "WFRLGCVGB010" },
-{ customer: "SOUTH SEAS CRUISES", product: "Alta Mora Etna Bianco", code: "WITETH0810-6-2021" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Rymill The Yearling Sauv Blanc", code: "WAURTYSB010" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Sam Miranda Cabernet Sauvignon", code: "WAUSMMRCAB010" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Shaw+Smith Sauvignon Blanc", code: "WAUSSSBL010" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Richland Chardonnay", code: "WAUWERCHD010" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Saint Julien Duluc", code: "WFR102022" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Macon Villages Chartron", code: "WFR241100" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Baron D'Arignac Red", code: "WFR645014" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Moulins De Citran Haut-Medoc", code: "WFR701182" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Nuits Saint Georges Moillard", code: "WFR755660" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Meursault Chartron ET", code: "WFR761461" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Pouilly Fuisse Charton", code: "WFR761476" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Bourgogne Chartron Pinot Noir", code: "WFR761493" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Nicolis Valpolicella", code: "WITETH0776-2021" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Cusumano Angimbe Bianco", code: "WITETH0815-6-2021" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Bellavista Franciacorta 750ml", code: "WITETH1401-6-NV" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Borgogno Langhe Nebbiolo", code: "WITETH2402-2020" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Borgogno Barbera d'Alba", code: "WITETH2418-6-2020" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Lavis Pinot Grigio Trentino", code: "WITETH57004-2022" },
-{ customer: "LAUCALA ISLAND RESORT", product: "La Gioiosa Prosecco", code: "WITETH5901-NV" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Belvento Vermentino Toscana", code: "WITETH6403-6-2022" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Villa Sparina Gavi -750ml", code: "WITETH7702-2022" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Kendall Jackson V R Merlot", code: "WUSJEKJVRMER010" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Kendall Jackson V R Zinfandel", code: "WUSJEKJVRZED010" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Joel Gott Pinot Noir SBC", code: "WUSSHWJGSBPN010" },
-{ customer: "LAUCALA ISLAND RESORT", product: "Pacific Heights Pinot Noir", code: "WUSSHWPHPN010" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Mancura Etnia Chardonnay", code: "WARGMAECHD010" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Mancura Vuelo Magico Cab Sauv", code: "WARGMALBRS010" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Gibson AOVC Eden Valley Shiraz", code: "WAUGWEVSH010" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Shaw+Smith M3 Chardonnay", code: "WAUSSCHD010" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Shaw+Smith Sauvignon Blanc", code: "WAUSSSBL010" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Yabby Lake SB Pinot Noir", code: "WAUYLSVPNN010" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Macon Villages Chartron", code: "WFR241100" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Santenay DOM Carillon", code: "WFR241671" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Rully 1er Cru Le Mei Chartron", code: "WFR242278" },
-{ customer: "KOKOMO ISLAND RESORT", product: "AOP Sancerre Les Fondettes", code: "WFR27520" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Chablis1ERCRU MichautVaucoupin", code: "WFR617666" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Cht Cadet BON GBGC", code: "WFR716095" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Clos De Vougeot Gran", code: "WFR745335" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Chablis Domaine Michaut 2020", code: "WFR745530" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Chablis Domain Michaut 2021", code: "WFR745530-2021" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Pommard 1er Cru Les", code: "WFR755234" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Nuits Saint Georges Moillard", code: "WFR755660" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Chassagne Montrachet Chartron", code: "WFR761436" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Meursault Chartron ET", code: "WFR761461" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Pouilly Fuisse Charton", code: "WFR761476" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Bourgogne Chartron Pinot Noir", code: "WFR761493" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Gevrey Chambertin 1e", code: "WFR761504" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Vosne Romanee Chartron", code: "WFR761531" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Cham Peters Reserve Brut NV", code: "WFRAW 0000 RESBRT" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Cham Peters Millesime 2019", code: "WFRAW 2019 LESPRT" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Lallier Brut Balthazar 12L", code: "WFRCLCPG050" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Lalier Brut Nabuchodonozor 15L", code: "WFRCLCPG055" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Chateau Mouton Rothschild Cru", code: "WFRCMRPGC010" },
-{ customer: "KOKOMO ISLAND RESORT", product: "AOPSancerr Les Fondettes", code: "WFRW 2023 27520" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Nicolis Valpolicella", code: "WITETH0776-2021" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Alta Mora Etna Bianco", code: "WITETH0810-6-2021" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Alta Mora Etna Rosso", code: "WITETH0811-6-2019" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Cusumano Angimbe Bianco", code: "WITETH0815-6-2021" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Scarpa Moscato d'Asti", code: "WITETH1156-6-2022" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Scarpa Vermouth d Torino Rosso", code: "WITETH1157-6-NV" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Bellavista Franciacorta 750ml", code: "WITETH1401-6-NV" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Borgogno Barolo Classico", code: "WITETH2401-6-2018" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Borgogno Langhe Nebbiolo", code: "WITETH2402-2020" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Borgogno Barolo DOCG Riserva", code: "WITETH2403-6-2015" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Borgogno Langhe Riesling", code: "WITETH2433-6-2020" },
-{ customer: "KOKOMO ISLAND RESORT", product: "St.Pauls Pinot Grigio AA", code: "WITETH50211-2021" },
-{ customer: "KOKOMO ISLAND RESORT", product: "St.Pauls Gfill Sauvignon AA", code: "WITETH50213-2021" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Sella&Mosca La Cala Vermentino", code: "WITETH6209-6-2022" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Belvento Vermentino Toscana", code: "WITETH6403-6-2022" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Villa Sparina Gavi -750ml", code: "WITETH7702-2022" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Riscasoli Brolio Chianti Risv", code: "WITETH9307-2019" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Ridolfi Brunello di Montalcino", code: "WITETH9701-6-2017" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Ridolfi Fiero Rosso Toscana", code: "WITETH9708-6-2019" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Cabernet Sauvignon", code: "WSAR 2019 OLDCAB" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Merlot", code: "WSAR 2019 OLDMER" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Syrah", code: "WSAR 2019 OLDSYR" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Cabernet Franc", code: "WSAR 2020 OLDFRC" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Oldenburg < CL Red", code: "WSAR 2021 OLDCLR" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Grenache Noir", code: "WSAR 2021 OLDGRN" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Rondekop   Per Se", code: "WSAR 2021 RONPER" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Rondekop   Rhodium", code: "WSAR 2021 RONRHD" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Rondekop   Stone Axe", code: "WSAR 2021 RONSTN" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Chardonnay", code: "WSAW 2023 OLDCHD" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Chenin Blanc", code: "WSAW 2023 OLDCHN" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Oldenburg < CL White", code: "WSAW 2023 OLDCLW" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Freemark Abbey Chardonnay", code: "WUSJEFACHD010" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Hartford Court Chardonnay", code: "WUSJEHFCHD010" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Hartford Court Pinot Noir", code: "WUSJEHFPN010" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Liberated Pinot Noir", code: "WUSJEKJLBPN010" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Hartford Court RussianRivPinot", code: "WUSR 2022 HCTPINOTR 5002274" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Joel Gott Pinot Noir CA", code: "WUSSHWJGPN010" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Joel Gott Pinot Noir SBC", code: "WUSSHWJGSBPN010" },
-{ customer: "KOKOMO ISLAND RESORT", product: "Hartford Court RussianRivChard", code: "WUSW 2019 HCTCHARD 0102274" },
-{ customer: "RADISSON RESORT", product: "Wildcard Unoaked Chardonnay", code: "WAUAEPLWCHD010" },
-{ customer: "RADISSON RESORT", product: "Gossips Chardonnay", code: "WAUGPCHD010" },
-{ customer: "RADISSON RESORT", product: "Langmeil Bella Rouge Cab Rose", code: "WAULMBRCAB010" },
-{ customer: "RADISSON RESORT", product: "Rymill The Yearling Cab/Sauv", code: "WAURTYCABS010" },
-{ customer: "RADISSON RESORT", product: "Sam Miranda Merlot", code: "WAUSMMRMER010" },
-{ customer: "RADISSON RESORT", product: "Sam Miranda Prosato", code: "WAUSMPROS010" },
-{ customer: "RADISSON RESORT", product: "Sashiko Grenache Shiraz", code: "WAUSSWGSM010" },
-{ customer: "RADISSON RESORT", product: "Richland Moscato", code: "WAUWERMS010" },
-{ customer: "RADISSON RESORT", product: "Yellow Tail Pinot Grigio", code: "WAUYTPG010" },
-{ customer: "RADISSON RESORT", product: "Baron D'Arignac Red", code: "WFR645014" },
-{ customer: "RADISSON RESORT", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
-{ customer: "RADISSON RESORT", product: "Bellavista Franciacorta 750ml", code: "WITETH1401-6-NV" },
-{ customer: "RADISSON RESORT", product: "Brightwater Gravels Pinot Gris", code: "WNZWLPNG030" },
-{ customer: "RADISSON RESORT", product: "Brightwater Gravels Pinot Noir", code: "WNZWLPNN030" },
-{ customer: "RADISSON RESORT", product: "Joel Gott Pinot Noir SBC", code: "WUSSHWJGSBPN010" },
-{ customer: "GRACE ROAD TRADING", product: "Gossips Cabernet Sauvignon", code: "WAUGPCAB010" },
-{ customer: "GRACE ROAD TRADING", product: "Gossips Chardonnay", code: "WAUGPCHD010" },
-{ customer: "GRACE ROAD TRADING", product: "Gossips Merlot", code: "WAUGPMER010" },
-{ customer: "GRACE ROAD TRADING", product: "Gossips Moscato Sweet Lips", code: "WAUGPMSL010" },
-{ customer: "GRACE ROAD TRADING", product: "Gossips Pink Moscato", code: "WAUGPPMO010" },
-{ customer: "GRACE ROAD TRADING", product: "Gossips Rose", code: "WAUGPROS010" },
-{ customer: "GRACE ROAD TRADING", product: "Gossips Sauvignon Blanc", code: "WAUGPSB010" },
-{ customer: "GRACE ROAD TRADING", product: "Gossips Shiraz", code: "WAUGPSHI010" },
-{ customer: "GRACE ROAD TRADING", product: "Gossips Semillon Sauv Blanc", code: "WAUGPSSB010" },
-{ customer: "GRACE ROAD TRADING", product: "Sweet Lips H/Pomegranate&Lime", code: "WAUGSLIHPL010" },
-{ customer: "GRACE ROAD TRADING", product: "Sweet Lips Mango E/Pasionfruit", code: "WAUGSLIMEP010" },
-{ customer: "GRACE ROAD TRADING", product: "SweetLips P/CoconutMexicanLime", code: "WAUGSLIPCM010" },
-{ customer: "GRACE ROAD TRADING", product: "Sweet Lips P/Raspberry&Vanila", code: "WAUGSLIPRV010" },
-{ customer: "GRACE ROAD TRADING", product: "Rumours Cabernet Sauv", code: "WAURMCSV010" },
-{ customer: "GRACE ROAD TRADING", product: "Rumours Merlot", code: "WAURMMER010" },
-{ customer: "GRACE ROAD TRADING", product: "Rumours Pink Moscato", code: "WAURMPMOS010" },
-{ customer: "GRACE ROAD TRADING", product: "Rumours Shiraz", code: "WAURMSHI010" },
-{ customer: "GRACE ROAD TRADING", product: "Sam Miranda Chardonnay", code: "WAUSMMRCHD010" },
-{ customer: "GRACE ROAD TRADING", product: "Sam Miranda Shiraz", code: "WAUSMMRSHI010" },
-{ customer: "GRACE ROAD TRADING", product: "Underline Shiraz", code: "WAUUNLNSHI010" },
-{ customer: "GRACE ROAD TRADING", product: "Richland Cabernet Sauvignon", code: "WAUWERCAB010" },
-{ customer: "GRACE ROAD TRADING", product: "Richland Merlot", code: "WAUWERMER010" },
-{ customer: "GRACE ROAD TRADING", product: "Richland Moscato", code: "WAUWERMS010" },
-{ customer: "GRACE ROAD TRADING", product: "Richland Pinot Grigio", code: "WAUWERPG010" },
-{ customer: "GRACE ROAD TRADING", product: "Richland Sauvignon Blanc", code: "WAUWERSB010" },
-{ customer: "GRACE ROAD TRADING", product: "Richland Shiraz", code: "WAUWERSHI010" },
-{ customer: "GRACE ROAD TRADING", product: "Yellow Tail Merlot", code: "WAUYTMER010" },
-{ customer: "GRACE ROAD TRADING", product: "Yellow Tail Pinot Noir", code: "WAUYTPN010" },
-{ customer: "GRACE ROAD TRADING", product: "Yellow Tail Riesling", code: "WAUYTRSG010" },
-{ customer: "GRACE ROAD TRADING", product: "Yellow Tail Sauvignon Blanc", code: "WAUYTSBL010" },
-{ customer: "GRACE ROAD TRADING", product: "Yellow Tail Shiraz", code: "WAUYTSHI010" },
-{ customer: "GRACE ROAD TRADING", product: "Yellow Tail Bubbles", code: "WAUYTSPW010" },
-{ customer: "GRACE ROAD TRADING", product: "Yellow Tail Bubbles Rose", code: "WAUYTSPW020" },
-{ customer: "GRACE ROAD TRADING", product: "Baron D'Arignac White", code: "WFR643505" },
-{ customer: "GRACE ROAD TRADING", product: "Baron D'Arignac Rose", code: "WFR644363" },
-{ customer: "GRACE ROAD TRADING", product: "Baron D'Arignac Red", code: "WFR645014" },
-{ customer: "GRACE ROAD TRADING", product: "Baron D'Arignac Brut Sparkling", code: "WFR675134" },
-{ customer: "GRACE ROAD TRADING", product: "Baron D'Arignac Brut S/Rose", code: "WFR687487" },
-{ customer: "GRACE ROAD TRADING", product: "JP Chenet Watermelon", code: "WFR745583" },
-{ customer: "GRACE ROAD TRADING", product: "JP Chenet Cassis", code: "WFR745628" },
-{ customer: "GRACE ROAD TRADING", product: "JP Chenet Peach", code: "WFR745629" },
-{ customer: "GRACE ROAD TRADING", product: "JP Chenet Strawberry/Raspberry", code: "WFR745630" },
-{ customer: "GRACE ROAD TRADING", product: "JP Chenet Litchi", code: "WFR745631" },
-{ customer: "GRACE ROAD TRADING", product: "JP Chenet Apple", code: "WFR745632" },
-{ customer: "GRACE ROAD TRADING", product: "JP Chenet Pineapple", code: "WFR745633" },
-{ customer: "GRACE ROAD TRADING", product: "JP Chenet Chardonnay", code: "WFRLGCCCC010" },
-{ customer: "GRACE ROAD TRADING", product: "JP Chenet Sauvignon", code: "WFRLGCCCS010" },
-{ customer: "GRACE ROAD TRADING", product: "JP Chenet Merlot", code: "WFRLGCMER010" },
-{ customer: "GRACE ROAD TRADING", product: "JP Chenet Shiraz", code: "WFRLGCSHI010" },
-{ customer: "GRACE ROAD TRADING", product: "Grandial Blanc de Blancs Brut", code: "WFRLGCVGB010" },
-{ customer: "GRACE ROAD TRADING", product: "Brightwater Gravels Pinot Gris", code: "WNZWLPNG030" },
-{ customer: "GRACE ROAD TRADING", product: "Brightwater Gravels Pinot Noir", code: "WNZWLPNN030" },
-{ customer: "GRACE ROAD TRADING", product: "Brightwater Gravels Sauv Blanc", code: "WNZWLSBL030" },
-{ customer: "GRACE ROAD TRADING", product: "Kendall Jackson V R Sauv Blanc", code: "WUSJEKJVRSBL010" },
-{ customer: "EDGE RESORT", product: "Vistamar Sepia Cabernet Sauv", code: "WARGVISRCAB010" },
-{ customer: "EDGE RESORT", product: "Gossips Chardonnay", code: "WAUGPCHD010" },
-{ customer: "EDGE RESORT", product: "Gibson 'The Dirtman' Shiraz", code: "WAUGWDTMN010" },
-{ customer: "EDGE RESORT", product: "Rumours Cabernet Sauv", code: "WAURMCSV010" },
-{ customer: "EDGE RESORT", product: "Sam Miranda Ballerina Rosato", code: "WAUSMBROS010" },
-{ customer: "EDGE RESORT", product: "Sam Miranda Riesling", code: "WAUSMKVRIE010" },
-{ customer: "EDGE RESORT", product: "Sam Miranda Cabernet Sauvignon", code: "WAUSMMRCAB010" },
-{ customer: "EDGE RESORT", product: "Sam Miranda Prosecco", code: "WAUSMPROSP010" },
-{ customer: "EDGE RESORT", product: "Shaw+Smith Sauvignon Blanc", code: "WAUSSSBL010" },
-{ customer: "EDGE RESORT", product: "Shaw+Smith Shiraz", code: "WAUSSSHI010" },
-{ customer: "EDGE RESORT", product: "3 Bridges Chardonnay", code: "WAUWEBCHD010" },
-{ customer: "EDGE RESORT", product: "Richland Chardonnay", code: "WAUWERCHD010" },
-{ customer: "EDGE RESORT", product: "Okiwi Bay Marlboru Sauv Blanc", code: "WAUWESOB010" },
-{ customer: "EDGE RESORT", product: "AOP Sancerre Les Fondettes", code: "WFR27520" },
-{ customer: "EDGE RESORT", product: "Pouilly Fume Les Ombelles", code: "WFR27524" },
-{ customer: "EDGE RESORT", product: "Chablis Domaine Michaut 2020", code: "WFR745530" },
-{ customer: "EDGE RESORT", product: "Chablis Domain Michaut 2021", code: "WFR745530-2021" },
-{ customer: "EDGE RESORT", product: "Bourgogne Chartron Pinot Noir", code: "WFR761493" },
-{ customer: "EDGE RESORT", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
-{ customer: "EDGE RESORT", product: "Gremillet 'Selection' Brut", code: "WFRCGCPG010" },
-{ customer: "EDGE RESORT", product: "Bellavista Franciacorta 750ml", code: "WITETH1401-6-NV" },
-{ customer: "EDGE RESORT", product: "St.Pauls Pinot Grigio AA", code: "WITETH50211-2021" },
-{ customer: "EDGE RESORT", product: "Lavis Pinot Grigio Trentino", code: "WITETH57004-2022" },
-{ customer: "EDGE RESORT", product: "Lavis Sauv Blanc Trevenezie", code: "WITETH57015-2021" },
-{ customer: "EDGE RESORT", product: "La Gioiosa Prosecco", code: "WITETH5901-NV" },
-{ customer: "EDGE RESORT", product: "Sella&Mosca 'La Cala' Vermentino", code: "WITETH6209-6-2022" },
-{ customer: "EDGE RESORT", product: "Ridolfi 'Fiero' Rosso Toscana", code: "WITETH9708-6-2019" },
-{ customer: "EDGE RESORT", product: "Brightwater Gravels Pinot Noir", code: "WNZWLPNN030" },
-{ customer: "EDGE RESORT", product: "Liberated Pinot Noir", code: "WUSJEKJLBPN010" },
-{ customer: "EDGE RESORT", product: "Kendall Jackson V R Merlot", code: "WUSJEKJVRMER010" },
-{ customer: "EDGE RESORT", product: "Joel Gott Pinot Noir SBC", code: "WUSSHWJGSBPN010" },
-{ customer: "SIX SENSES FIJI", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
-{ customer: "SIX SENSES FIJI", product: "Villa Sparina Gavi -750ml", code: "WITETH7702-2022" },
-{ customer: "SIX SENSES FIJI", product: "La Gioiosa Prosecco", code: "WITETH5901-NV" },
-{ customer: "SIX SENSES FIJI", product: "Beans Espresso 1000g", code: "FCAWBSEB1000" },
-{ customer: "SIX SENSES FIJI", product: "Mr Boema Cleaner 500g Jar", code: "ZESBOEK650-1A" },
-{ customer: "SIX SENSES FIJI", product: "Cham Peters Reserve Brut NV", code: "WFRAW 0000 RESBRT" },
-{ customer: "SIX SENSES FIJI", product: "Napa Cellars Merlot", code: "WUSSHWNCMER010" },
-{ customer: "SIX SENSES FIJI", product: "Peter Lehmann P Riesling", code: "WAUAEPLPRIE010" },
-{ customer: "SIX SENSES FIJI", product: "Brightwater Gravels Pinot Gris", code: "WNZWLPNG030" },
-{ customer: "SIX SENSES FIJI", product: "Sheild Pinot Gris", code: "WNZDCSPG010" },
-{ customer: "SIX SENSES FIJI", product: "Lavis Pinot Grigio Trentino", code: "WITETH57004-2021" },
-{ customer: "SIX SENSES FIJI", product: "Joel Gott Pinot Noir SBC", code: "WUSSHWJGSBPN010" },
-{ customer: "SIX SENSES FIJI", product: "Bellavista Franciacorta 750ml", code: "WITETH1401-6-NV" },
-{ customer: "SHERATON RESORT", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
-{ customer: "SHERATON RESORT", product: "Borgogno Barolo Classico", code: "WITETH2401-6-2018" },
-{ customer: "SHERATON RESORT", product: "St.Pauls Pinot Grigio AA", code: "WITETH50211-2021" },
-{ customer: "SHERATON RESORT", product: "Lavis Pinot Grigio Trentino", code: "WITETH57004-2022" },
-{ customer: "SHERATON RESORT", product: "Riscasoli 'Brolio' Chianti", code: "WITETH9305-2020" },
-{ customer: "SHERATON RESORT", product: "Nicolis Amarone d Valpolicella", code: "WITETH0701-6-2017" },
-{ customer: "SHERATON RESORT", product: "Belvento Vermentino Toscana", code: "WITETH6403-6-2022" },
-{ customer: "SHERATON RESORT", product: "Kendall Jackson V R Merlot", code: "WUSJEKJVRMER010" },
-{ customer: "SHERATON RESORT", product: "Kendall Jackson G R Chardonnay", code: "WUSJEKJGRCHD010" },
-{ customer: "SHERATON RESORT", product: "Lavis Pinot Grigio Trentino", code: "WITETH57004-2021" },
-{ customer: "SHERATON RESORT", product: "Cham Peters Reserve Brut NV", code: "WFRAW 0000 RESBRT" },
-{ customer: "Intercontinental Fiji Golf Resort & Spa", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
-{ customer: "Intercontinental Fiji Golf Resort & Spa", product: "Rymill 'The Yearling' Cab/Sauv", code: "WAURTYCABS010" }
-        ];
-
-        // Mock data for coffee machines
-        const machineData = [
-        { code: "ZEQFK3400000176547", description: "A300 Franke Coffee Machine", customer: "Altitude Refrigeration Solutions Pte Ltd", type: "Free on Loan", amount: "-", spPerKg: "58.50" },
-{ code: "ZEQFK3400000176513", description: "A300 Franke Coffee Machine", customer: "Asco Motors", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176512", description: "A300 Franke Coffee Machine", customer: "Coral Coast Divers", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176544", description: "A300 Franke Coffee Machine", customer: "Damodar Labasa", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176536", description: "A300 Franke Coffee Machine", customer: "Damodar Townhouse", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176508", description: "A300 Franke Coffee Machine", customer: "Edge Resort", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
-{ code: "ZEQFK3400000176538", description: "A300 Franke Coffee Machine", customer: "Essity", type: "Purchased", amount: "-", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176518", description: "A300 Franke Coffee Machine", customer: "Fiji Police Force", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176519", description: "A300 Franke Coffee Machine", customer: "Grand Pacific Hotel", type: "Free on Loan", amount: "-", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176520", description: "A300 Franke Coffee Machine", customer: "Grand Pacific Hotel", type: "Free on Loan", amount: "-", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176529", description: "A300 Franke Coffee Machine", customer: "Holiday Inn", type: "Free on Loan", amount: "-", spPerKg: "58.50" },
-{ code: "ZEQFK3400000176533", description: "A300 Franke Coffee Machine", customer: "In Stock - Lami", type: "", amount: "-", spPerKg: "-" },
-{ code: "ZEQFK3400000176526", description: "A300 Franke Coffee Machine", customer: "Interlink Shipping", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176545", description: "A300 Franke Coffee Machine", customer: "Kokomo Island Resort", type: "Free on Loan", amount: "-", spPerKg: "46.50" },
-{ code: "ZEQFK3400000176521", description: "A300 Franke Coffee Machine", customer: "Laucala Island Resort Ltd", type: "Purchased", amount: "-", spPerKg: "62.00" },
-{ code: "ZEQFK3400000176535", description: "A300 Franke Coffee Machine", customer: "Laucala Island Resort Ltd", type: "Purchased", amount: "-", spPerKg: "62.00" },
-{ code: "ZEQFK3400000176541", description: "A300 Franke Coffee Machine", customer: "My Golden Spice Pte Ltd", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176515", description: "A300 Franke Coffee Machine", customer: "Nadi Warehouse", type: "", amount: "-", spPerKg: "-" },
-{ code: "ZEQFK3400000176523", description: "A300 Franke Coffee Machine", customer: "Nadi Warehouse", type: "", amount: "-", spPerKg: "-" },
-{ code: "ZEQFK3400000176524", description: "A300 Franke Coffee Machine", customer: "Nadi Warehouse", type: "", amount: "-", spPerKg: "-" },
-{ code: "ZEQFK3400000176543", description: "A300 Franke Coffee Machine", customer: "Nadi Warehouse", type: "", amount: "-", spPerKg: "-" },
-{ code: "ZEQFK3400000176537", description: "A300 Franke Coffee Machine", customer: "Nokonoko Investment", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176510", description: "A300 Franke Coffee Machine", customer: "PAT Consulting Pte Limited T/A TEMO Consulting", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176530", description: "A300 Franke Coffee Machine", customer: "Radisson", type: "Free on Loan", amount: "-", spPerKg: "46.00" },
-{ code: "ZEQFK3400000176506", description: "A300 Franke Coffee Machine", customer: "South Sea Cruises", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
-{ code: "ZEQFK3400000176514", description: "A300 Franke Coffee Machine", customer: "South Sea Cruises", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
-{ code: "ZEQFK3400000176539", description: "A300 Franke Coffee Machine", customer: "The Establishment", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176534", description: "A300 Franke Coffee Machine", customer: "The Hot Bread Kitchen - USP", type: "Rental", amount: "442.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176525", description: "A300 Franke Coffee Machine", customer: "Total - Laucala Beach", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176546", description: "A300 Franke Coffee Machine", customer: "Total - Nadi Backroad (Motorex Complex)", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176527", description: "A300 Franke Coffee Machine", customer: "Total - Navutu", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176542", description: "A300 Franke Coffee Machine", customer: "Total - Sigatoka", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176532", description: "A300 Franke Coffee Machine", customer: "Total Facilities Management", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176540", description: "A300 Franke Coffee Machine", customer: "Total Korovou", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176511", description: "A300 Franke Coffee Machine", customer: "TotalEnergies", type: "Purchased", amount: "-", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176516", description: "A300 Franke Coffee Machine", customer: "TotalEnergies", type: "Purchased", amount: "-", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176517", description: "A300 Franke Coffee Machine", customer: "TotalEnergies", type: "Purchased", amount: "-", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176507", description: "A300 Franke Coffee Machine", customer: "Twenty4Seven Service Station", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176522", description: "A300 Franke Coffee Machine", customer: "Village 4", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176509", description: "A300 Franke Coffee Machine", customer: "Westpac Bank", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176528", description: "A300 Franke Coffee Machine", customer: "Yatu Lau Company", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFK3400000176531", description: "A300 Franke Coffee Machine", customer: "Yatu Lau Company", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-{ code: "ZEQFKKA200002", description: "A400 Franke Coffee Machine", customer: "Anand & Prasad - Total Saweni", type: "Free on Loan", amount: "", spPerKg: "55.00" },
-  { code: "ZEQFK3400000008848", description: "A400 Franke Coffee Machine", customer: "Damodar Event Cinemas", type: "Free on Loan", amount: "", spPerKg: "55.00" },
-  { code: "ZEQFK3400000008841", description: "A400 Franke Coffee Machine", customer: "Edge Resort", type: "Free on Loan", amount: "", spPerKg: "62.00" },
-  { code: "ZEQFK3400000007095", description: "A400 Franke Coffee Machine", customer: "Epic", type: "Rental", amount: "273.00", spPerKg: "55.00" },
-  { code: "ZEQFK3400000007087", description: "A400 Franke Coffee Machine", customer: "Fijian Resort", type: "Free on Loan", amount: "", spPerKg: "55.00" },
-  { code: "ZEQFK3400000007090", description: "A400 Franke Coffee Machine", customer: "Fijian Resort", type: "Free on Loan", amount: "", spPerKg: "55.00" },
-  { code: "ZEQFK3400000008852", description: "A400 Franke Coffee Machine", customer: "Fijian Resort", type: "Free on Loan", amount: "", spPerKg: "55.00" },
-  { code: "ZEQFK3400000007091", description: "A400 Franke Coffee Machine", customer: "FNPF", type: "Rental", amount: "350.00", spPerKg: "55.00" },
-  { code: "ZEQFK3400000008844", description: "A400 Franke Coffee Machine", customer: "FNPF", type: "Rental", amount: "350.00", spPerKg: "55.00" },
-  { code: "ZEQFK3400000007092", description: "A400 Franke Coffee Machine", customer: "Grand Pacific Hotel", type: "Free on Loan", amount: "", spPerKg: "55.00" },
-  { code: "ZEQFK3400000008849", description: "A400 Franke Coffee Machine", customer: "HFC Bank Nadi", type: "Rental", amount: "350.00", spPerKg: "55.00" },
-  { code: "ZEQFK3400000007089", description: "A400 Franke Coffee Machine", customer: "HFC Bank Suva", type: "Rental", amount: "350.00", spPerKg: "55.00" },
-  { code: "ZEQFK3400000007088", description: "A400 Franke Coffee Machine", customer: "Holiday Inn", type: "Free on Loan", amount: "", spPerKg: "58.50" },
-  { code: "ZEQFK3400000007085", description: "A400 Franke Coffee Machine", customer: "Radisson", type: "Free on Loan", amount: "", spPerKg: "46.00" },
-  { code: "ZEQFK3400000007093", description: "A400 Franke Coffee Machine", customer: "Radisson", type: "Free on Loan", amount: "", spPerKg: "46.00" },
-  { code: "ZEQFK3400000008846", description: "A400 Franke Coffee Machine", customer: "Radisson", type: "Free on Loan", amount: "", spPerKg: "46.00" },
-  { code: "ZEQFK3400000008845", description: "A400 Franke Coffee Machine", customer: "South Seas", type: "Free on Loan", amount: "", spPerKg: "62.00" },
-  { code: "ZEQFK3400000008847", description: "A400 Franke Coffee Machine", customer: "The Hot Bread Kitchen - Damodar", type: "Rental", amount: "322.00", spPerKg: "55.00" },
-  { code: "ZEQFK3400000008843", description: "A400 Franke Coffee Machine", customer: "The Hot Bread Kitchen - Namaka", type: "Rental", amount: "322.00", spPerKg: "55.00" },
-  { code: "ZEQFK3400000007094", description: "A400 Franke Coffee Machine", customer: "Total - Flagstaff", type: "Rental", amount: "400.00", spPerKg: "55.00" },
-  { code: "ZEQFK3400000007096", description: "A400 Franke Coffee Machine", customer: "Total Waila", type: "Rental", amount: "296.00", spPerKg: "55.00" },
-  { code: "ZEQFKKA200002", description: "A400 Franke Coffee Machine", customer: "Tradewinds Marine", type: "Purchased", amount: "", spPerKg: "55.00" },
-  { code: "ZEQFK3400000007086", description: "A400 Franke Coffee Machine", customer: "Village 6", type: "Free on Loan", amount: "", spPerKg: "55.00" },
-  { code: "ZEQFK147332", description: "S700 Coffee Machine", customer: "Nadi Stock", type: "", amount: "", spPerKg: "" },
-  { code: "ZEQFK3400000006823", description: "S700 Coffee Machine", customer: "Epic International Pte Ltd", type: "Rental", amount: "372.00", spPerKg: "" },
-  { code: "ZEQFK3400000006825", description: "S700 Coffee Machine", customer: "Lami Stock", type: "", amount: "", spPerKg: "" },
-  { code: "ZEQFK5150527130", description: "S700 Coffee Machine", customer: "Fijian Resort", type: "Free On Loan", amount: "", spPerKg: "" },
-  { code: "ZEQDCF22002110", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Fiji National University", type: "Purchased", amount: "", spPerKg: "55.00" },
-  { code: "ZEQDCF22002111", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Kokomo Island Resort", type: "Free on Loan", amount: "-", spPerKg: "46.50" },
-  { code: "ZEQDCF22002112", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
-  { code: "ZEQDCF22002113", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Mitchell Consultant Pte Ltd", type: "Rental", amount: "360", spPerKg: "55.00" },
-  { code: "ZEQDCF22002114", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
-  { code: "ZEQDCF22002115", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
-  { code: "ZEQDCF22002116", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Laucala Island Resort Ltd", type: "Purchased", amount: "-", spPerKg: "62.00" },
-  { code: "ZEQDCF22002117", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Amma Production", type: "Free on Loan", amount: "-", spPerKg: "55.00" },
-  { code: "ZEQDCF22002118", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
-  { code: "ZEQDCF22002119", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "The Foodie Diner", type: "Rental", amount: "360", spPerKg: "55.00" },
-  { code: "ZEQDCF22002120", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Fijian Resort", type: "Free on Loan", amount: "-", spPerKg: "55.00" },
-  { code: "ZEQDCF22002121", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
-  { code: "ZEQDCF22002122", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Captain's Cafe", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
-  { code: "ZEQDCF22002123", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
-  { code: "ZEQDCF22002124", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Lawhill Japan", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
-  { code: "ZEQDCF22002125", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Kokomo Island Resort", type: "Free on Loan", amount: "-", spPerKg: "46.50" },
-  { code: "ZEQDCF22002126", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Tokoriki Island Resort", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
-  { code: "ZEQDCF22002127", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Narayanganj Fiji Pte Ltd", type: "Rental", amount: "360", spPerKg: "55.00" },
-  { code: "ZEQDCF22002128", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Kokomo Island Resort", type: "Free on Loan", amount: "-", spPerKg: "46.50" },
-  { code: "ZEQDCF22002129", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" }
-        ];
-
-        // Customer and product data for purchase dashboard
-        const customers = [...new Set(purchaseData.map(item => item.customer))];
-        const products = [...new Set(purchaseData.map(item => item.product))];
-
-        // Populate customer dropdown for wine dashboard
-        const customerSelect = document.getElementById('customerSelect');
-        const productSelect = document.getElementById('productSelect');
-        const customerProductsDiv = document.getElementById('customerProducts');
-        const productCustomersDiv = document.getElementById('productCustomers');
-        const topProductsDiv = document.getElementById('topProducts');
-        const purchaseBody = document.getElementById('purchaseBody');
-
-        customers.forEach(customer => {
-            const option = document.createElement('option');
-            option.value = customer;
-            option.textContent = customer;
-            customerSelect.appendChild(option);
-        });
-
-        products.forEach(product => {
-            const option = document.createElement('option');
-            option.value = product;
-            option.textContent = product; // Only show product name
-            productSelect.appendChild(option);
-        });
-
-        // Populate purchase table
-        function populatePurchaseTable() {
-            purchaseBody.innerHTML = ''; // Reset table display
-            purchaseData.forEach(item => {
-                const row = document.createElement('tr');
-                row.innerHTML = `<td>${item.customer}</td><td>${item.product}</td><td>${item.code}</td>`;
-                purchaseBody.appendChild(row);
+            const checkPassword = () => {
+                if (passwordInput.value === correctPassword) {
+                    passwordModal.style.opacity = '0';
+                    setTimeout(() => {
+                        passwordModal.style.display = 'none';
+                        appContainer.style.display = 'block';
+                    }, 300);
+                } else {
+                    passwordError.style.display = 'block';
+                    passwordInput.classList.add('border-red-500');
+                    passwordInput.value = '';
+                }
+            };
+            
+            submitPasswordBtn.addEventListener('click', checkPassword);
+            passwordInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
             });
-        }
+            passwordInput.focus();
 
-        // Update products based on selected customer
-        function updateProducts() {
-            const selectedCustomer = customerSelect.value;
-            customerProductsDiv.innerHTML = ''; // Reset products display
+            // --- DATA ---
+            const purchaseData = [
+                { customer: "SOUTH SEAS CRUISES", product: "Sam Miranda Ballerina Moscato", code: "WAUSMBMOS010" },
+                { customer: "SOUTH SEAS CRUISES", product: "Sam Miranda Cabernet Sauvignon", code: "WAUSMMRCAB010" },
+                { customer: "SOUTH SEAS CRUISES", product: "Sam Miranda Shiraz", code: "WAUSMMRSHI010" },
+                { customer: "SOUTH SEAS CRUISES", product: "Underline Shiraz", code: "WAUUNLNSHI010" },
+                { customer: "SOUTH SEAS CRUISES", product: "Underline Semillion/Sauv Blanc", code: "WAUUNLSSB010" },
+                { customer: "SOUTH SEAS CRUISES", product: "Poker Face Chardonnay", code: "WAUWEPFCHD010" },
+                { customer: "SOUTH SEAS CRUISES", product: "Poker Face Shiraz", code: "WAUWEPFSHI010" },
+                { customer: "SOUTH SEAS CRUISES", product: "Richland Chardonnay", code: "WAUWERCHD010" },
+                { customer: "SOUTH SEAS CRUISES", product: "Richland Shiraz", code: "WAUWERSHI010" },
+                { customer: "SOUTH SEAS CRUISES", product: "Baron D'Arignac Red", code: "WFR645014" },
+                { customer: "SOUTH SEAS CRUISES", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
+                { customer: "SOUTH SEAS CRUISES", product: "Charton Blanc de Blancs Brut", code: "WFRLGCVCB010" },
+                { customer: "SOUTH SEAS CRUISES", product: "Grandial Blanc de Blancs Brut", code: "WFRLGCVGB010" },
+                { customer: "SOUTH SEAS CRUISES", product: "Alta Mora Etna Bianco", code: "WITETH0810-6-2021" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Rymill The Yearling Sauv Blanc", code: "WAURTYSB010" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Sam Miranda Cabernet Sauvignon", code: "WAUSMMRCAB010" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Shaw+Smith Sauvignon Blanc", code: "WAUSSSBL010" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Richland Chardonnay", code: "WAUWERCHD010" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Saint Julien Duluc", code: "WFR102022" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Macon Villages Chartron", code: "WFR241100" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Baron D'Arignac Red", code: "WFR645014" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Moulins De Citran Haut-Medoc", code: "WFR701182" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Nuits Saint Georges Moillard", code: "WFR755660" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Meursault Chartron ET", code: "WFR761461" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Pouilly Fuisse Charton", code: "WFR761476" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Bourgogne Chartron Pinot Noir", code: "WFR761493" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Nicolis Valpolicella", code: "WITETH0776-2021" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Cusumano Angimbe Bianco", code: "WITETH0815-6-2021" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Bellavista Franciacorta 750ml", code: "WITETH1401-6-NV" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Borgogno Langhe Nebbiolo", code: "WITETH2402-2020" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Borgogno Barbera d'Alba", code: "WITETH2418-6-2020" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Lavis Pinot Grigio Trentino", code: "WITETH57004-2022" },
+                { customer: "LAUCALA ISLAND RESORT", product: "La Gioiosa Prosecco", code: "WITETH5901-NV" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Belvento Vermentino Toscana", code: "WITETH6403-6-2022" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Villa Sparina Gavi -750ml", code: "WITETH7702-2022" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Kendall Jackson V R Merlot", code: "WUSJEKJVRMER010" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Kendall Jackson V R Zinfandel", code: "WUSJEKJVRZED010" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Joel Gott Pinot Noir SBC", code: "WUSSHWJGSBPN010" },
+                { customer: "LAUCALA ISLAND RESORT", product: "Pacific Heights Pinot Noir", code: "WUSSHWPHPN010" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Mancura Etnia Chardonnay", code: "WARGMAECHD010" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Mancura Vuelo Magico Cab Sauv", code: "WARGMALBRS010" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Gibson AOVC Eden Valley Shiraz", code: "WAUGWEVSH010" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Shaw+Smith M3 Chardonnay", code: "WAUSSCHD010" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Shaw+Smith Sauvignon Blanc", code: "WAUSSSBL010" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Yabby Lake SB Pinot Noir", code: "WAUYLSVPNN010" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Macon Villages Chartron", code: "WFR241100" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Santenay DOM Carillon", code: "WFR241671" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Rully 1er Cru Le Mei Chartron", code: "WFR242278" },
+                { customer: "KOKOMO ISLAND RESORT", product: "AOP Sancerre Les Fondettes", code: "WFR27520" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Chablis1ERCRU MichautVaucoupin", code: "WFR617666" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Cht Cadet BON GBGC", code: "WFR716095" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Clos De Vougeot Gran", code: "WFR745335" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Chablis Domaine Michaut 2020", code: "WFR745530" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Chablis Domain Michaut 2021", code: "WFR745530-2021" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Pommard 1er Cru Les", code: "WFR755234" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Nuits Saint Georges Moillard", code: "WFR755660" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Chassagne Montrachet Chartron", code: "WFR761436" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Meursault Chartron ET", code: "WFR761461" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Pouilly Fuisse Charton", code: "WFR761476" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Bourgogne Chartron Pinot Noir", code: "WFR761493" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Gevrey Chambertin 1e", code: "WFR761504" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Vosne Romanee Chartron", code: "WFR761531" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Cham Peters Reserve Brut NV", code: "WFRAW 0000 RESBRT" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Cham Peters Millesime 2019", code: "WFRAW 2019 LESPRT" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Lallier Brut Balthazar 12L", code: "WFRCLCPG050" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Lalier Brut Nabuchodonozor 15L", code: "WFRCLCPG055" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Chateau Mouton Rothschild Cru", code: "WFRCMRPGC010" },
+                { customer: "KOKOMO ISLAND RESORT", product: "AOPSancerr Les Fondettes", code: "WFRW 2023 27520" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Nicolis Valpolicella", code: "WITETH0776-2021" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Alta Mora Etna Bianco", code: "WITETH0810-6-2021" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Alta Mora Etna Rosso", code: "WITETH0811-6-2019" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Cusumano Angimbe Bianco", code: "WITETH0815-6-2021" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Scarpa Moscato d'Asti", code: "WITETH1156-6-2022" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Scarpa Vermouth d Torino Rosso", code: "WITETH1157-6-NV" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Bellavista Franciacorta 750ml", code: "WITETH1401-6-NV" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Borgogno Barolo Classico", code: "WITETH2401-6-2018" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Borgogno Langhe Nebbiolo", code: "WITETH2402-2020" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Borgogno Barolo DOCG Riserva", code: "WITETH2403-6-2015" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Borgogno Langhe Riesling", code: "WITETH2433-6-2020" },
+                { customer: "KOKOMO ISLAND RESORT", product: "St.Pauls Pinot Grigio AA", code: "WITETH50211-2021" },
+                { customer: "KOKOMO ISLAND RESORT", product: "St.Pauls Gfill Sauvignon AA", code: "WITETH50213-2021" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Sella&Mosca La Cala Vermentino", code: "WITETH6209-6-2022" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Belvento Vermentino Toscana", code: "WITETH6403-6-2022" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Villa Sparina Gavi -750ml", code: "WITETH7702-2022" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Riscasoli Brolio Chianti Risv", code: "WITETH9307-2019" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Ridolfi Brunello di Montalcino", code: "WITETH9701-6-2017" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Ridolfi Fiero Rosso Toscana", code: "WITETH9708-6-2019" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Cabernet Sauvignon", code: "WSAR 2019 OLDCAB" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Merlot", code: "WSAR 2019 OLDMER" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Syrah", code: "WSAR 2019 OLDSYR" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Cabernet Franc", code: "WSAR 2020 OLDFRC" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Oldenburg < CL Red", code: "WSAR 2021 OLDCLR" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Grenache Noir", code: "WSAR 2021 OLDGRN" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Rondekop   Per Se", code: "WSAR 2021 RONPER" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Rondekop   Rhodium", code: "WSAR 2021 RONRHD" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Rondekop   Stone Axe", code: "WSAR 2021 RONSTN" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Chardonnay", code: "WSAW 2023 OLDCHD" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Oldenburg Chenin Blanc", code: "WSAW 2023 OLDCHN" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Oldenburg < CL White", code: "WSAW 2023 OLDCLW" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Freemark Abbey Chardonnay", code: "WUSJEFACHD010" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Hartford Court Chardonnay", code: "WUSJEHFCHD010" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Hartford Court Pinot Noir", code: "WUSJEHFPN010" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Liberated Pinot Noir", code: "WUSJEKJLBPN010" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Hartford Court RussianRivPinot", code: "WUSR 2022 HCTPINOTR 5002274" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Joel Gott Pinot Noir CA", code: "WUSSHWJGPN010" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Joel Gott Pinot Noir SBC", code: "WUSSHWJGSBPN010" },
+                { customer: "KOKOMO ISLAND RESORT", product: "Hartford Court RussianRivChard", code: "WUSW 2019 HCTCHARD 0102274" },
+                { customer: "RADISSON RESORT", product: "Wildcard Unoaked Chardonnay", code: "WAUAEPLWCHD010" },
+                { customer: "RADISSON RESORT", product: "Gossips Chardonnay", code: "WAUGPCHD010" },
+                { customer: "RADISSON RESORT", product: "Langmeil Bella Rouge Cab Rose", code: "WAULMBRCAB010" },
+                { customer: "RADISSON RESORT", product: "Rymill The Yearling Cab/Sauv", code: "WAURTYCABS010" },
+                { customer: "RADISSON RESORT", product: "Sam Miranda Merlot", code: "WAUSMMRMER010" },
+                { customer: "RADISSON RESORT", product: "Sam Miranda Prosato", code: "WAUSMPROS010" },
+                { customer: "RADISSON RESORT", product: "Sashiko Grenache Shiraz", code: "WAUSSWGSM010" },
+                { customer: "RADISSON RESORT", product: "Richland Moscato", code: "WAUWERMS010" },
+                { customer: "RADISSON RESORT", product: "Yellow Tail Pinot Grigio", code: "WAUYTPG010" },
+                { customer: "RADISSON RESORT", product: "Baron D'Arignac Red", code: "WFR645014" },
+                { customer: "RADISSON RESORT", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
+                { customer: "RADISSON RESORT", product: "Bellavista Franciacorta 750ml", code: "WITETH1401-6-NV" },
+                { customer: "RADISSON RESORT", product: "Brightwater Gravels Pinot Gris", code: "WNZWLPNG030" },
+                { customer: "RADISSON RESORT", product: "Brightwater Gravels Pinot Noir", code: "WNZWLPNN030" },
+                { customer: "RADISSON RESORT", product: "Joel Gott Pinot Noir SBC", code: "WUSSHWJGSBPN010" },
+                { customer: "GRACE ROAD TRADING", product: "Gossips Cabernet Sauvignon", code: "WAUGPCAB010" },
+                { customer: "GRACE ROAD TRADING", product: "Gossips Chardonnay", code: "WAUGPCHD010" },
+                { customer: "GRACE ROAD TRADING", product: "Gossips Merlot", code: "WAUGPMER010" },
+                { customer: "GRACE ROAD TRADING", product: "Gossips Moscato Sweet Lips", code: "WAUGPMSL010" },
+                { customer: "GRACE ROAD TRADING", product: "Gossips Pink Moscato", code: "WAUGPPMO010" },
+                { customer: "GRACE ROAD TRADING", product: "Gossips Rose", code: "WAUGPROS010" },
+                { customer: "GRACE ROAD TRADING", product: "Gossips Sauvignon Blanc", code: "WAUGPSB010" },
+                { customer: "GRACE ROAD TRADING", product: "Gossips Shiraz", code: "WAUGPSHI010" },
+                { customer: "GRACE ROAD TRADING", product: "Gossips Semillon Sauv Blanc", code: "WAUGPSSB010" },
+                { customer: "GRACE ROAD TRADING", product: "Sweet Lips H/Pomegranate&Lime", code: "WAUGSLIHPL010" },
+                { customer: "GRACE ROAD TRADING", product: "Sweet Lips Mango E/Pasionfruit", code: "WAUGSLIMEP010" },
+                { customer: "GRACE ROAD TRADING", product: "SweetLips P/CoconutMexicanLime", code: "WAUGSLIPCM010" },
+                { customer: "GRACE ROAD TRADING", product: "Sweet Lips P/Raspberry&Vanila", code: "WAUGSLIPRV010" },
+                { customer: "GRACE ROAD TRADING", product: "Rumours Cabernet Sauv", code: "WAURMCSV010" },
+                { customer: "GRACE ROAD TRADING", product: "Rumours Merlot", code: "WAURMMER010" },
+                { customer: "GRACE ROAD TRADING", product: "Rumours Pink Moscato", code: "WAURMPMOS010" },
+                { customer: "GRACE ROAD TRADING", product: "Rumours Shiraz", code: "WAURMSHI010" },
+                { customer: "GRACE ROAD TRADING", product: "Sam Miranda Chardonnay", code: "WAUSMMRCHD010" },
+                { customer: "GRACE ROAD TRADING", product: "Sam Miranda Shiraz", code: "WAUSMMRSHI010" },
+                { customer: "GRACE ROAD TRADING", product: "Underline Shiraz", code: "WAUUNLNSHI010" },
+                { customer: "GRACE ROAD TRADING", product: "Richland Cabernet Sauvignon", code: "WAUWERCAB010" },
+                { customer: "GRACE ROAD TRADING", product: "Richland Merlot", code: "WAUWERMER010" },
+                { customer: "GRACE ROAD TRADING", product: "Richland Moscato", code: "WAUWERMS010" },
+                { customer: "GRACE ROAD TRADING", product: "Richland Pinot Grigio", code: "WAUWERPG010" },
+                { customer: "GRACE ROAD TRADING", product: "Richland Sauvignon Blanc", code: "WAUWERSB010" },
+                { customer: "GRACE ROAD TRADING", product: "Richland Shiraz", code: "WAUWERSHI010" },
+                { customer: "GRACE ROAD TRADING", product: "Yellow Tail Merlot", code: "WAUYTMER010" },
+                { customer: "GRACE ROAD TRADING", product: "Yellow Tail Pinot Noir", code: "WAUYTPN010" },
+                { customer: "GRACE ROAD TRADING", product: "Yellow Tail Riesling", code: "WAUYTRSG010" },
+                { customer: "GRACE ROAD TRADING", product: "Yellow Tail Sauvignon Blanc", code: "WAUYTSBL010" },
+                { customer: "GRACE ROAD TRADING", product: "Yellow Tail Shiraz", code: "WAUYTSHI010" },
+                { customer: "GRACE ROAD TRADING", product: "Yellow Tail Bubbles", code: "WAUYTSPW010" },
+                { customer: "GRACE ROAD TRADING", product: "Yellow Tail Bubbles Rose", code: "WAUYTSPW020" },
+                { customer: "GRACE ROAD TRADING", product: "Baron D'Arignac White", code: "WFR643505" },
+                { customer: "GRACE ROAD TRADING", product: "Baron D'Arignac Rose", code: "WFR644363" },
+                { customer: "GRACE ROAD TRADING", product: "Baron D'Arignac Red", code: "WFR645014" },
+                { customer: "GRACE ROAD TRADING", product: "Baron D'Arignac Brut Sparkling", code: "WFR675134" },
+                { customer: "GRACE ROAD TRADING", product: "Baron D'Arignac Brut S/Rose", code: "WFR687487" },
+                { customer: "GRACE ROAD TRADING", product: "JP Chenet Watermelon", code: "WFR745583" },
+                { customer: "GRACE ROAD TRADING", product: "JP Chenet Cassis", code: "WFR745628" },
+                { customer: "GRACE ROAD TRADING", product: "JP Chenet Peach", code: "WFR745629" },
+                { customer: "GRACE ROAD TRADING", product: "JP Chenet Strawberry/Raspberry", code: "WFR745630" },
+                { customer: "GRACE ROAD TRADING", product: "JP Chenet Litchi", code: "WFR745631" },
+                { customer: "GRACE ROAD TRADING", product: "JP Chenet Apple", code: "WFR745632" },
+                { customer: "GRACE ROAD TRADING", product: "JP Chenet Pineapple", code: "WFR745633" },
+                { customer: "GRACE ROAD TRADING", product: "JP Chenet Chardonnay", code: "WFRLGCCCC010" },
+                { customer: "GRACE ROAD TRADING", product: "JP Chenet Sauvignon", code: "WFRLGCCCS010" },
+                { customer: "GRACE ROAD TRADING", product: "JP Chenet Merlot", code: "WFRLGCMER010" },
+                { customer: "GRACE ROAD TRADING", product: "JP Chenet Shiraz", code: "WFRLGCSHI010" },
+                { customer: "GRACE ROAD TRADING", product: "Grandial Blanc de Blancs Brut", code: "WFRLGCVGB010" },
+                { customer: "GRACE ROAD TRADING", product: "Brightwater Gravels Pinot Gris", code: "WNZWLPNG030" },
+                { customer: "GRACE ROAD TRADING", product: "Brightwater Gravels Pinot Noir", code: "WNZWLPNN030" },
+                { customer: "GRACE ROAD TRADING", product: "Brightwater Gravels Sauv Blanc", code: "WNZWLSBL030" },
+                { customer: "GRACE ROAD TRADING", product: "Kendall Jackson V R Sauv Blanc", code: "WUSJEKJVRSBL010" },
+                { customer: "EDGE RESORT", product: "Vistamar Sepia Cabernet Sauv", code: "WARGVISRCAB010" },
+                { customer: "EDGE RESORT", product: "Gossips Chardonnay", code: "WAUGPCHD010" },
+                { customer: "EDGE RESORT", product: "Gibson 'The Dirtman' Shiraz", code: "WAUGWDTMN010" },
+                { customer: "EDGE RESORT", product: "Rumours Cabernet Sauv", code: "WAURMCSV010" },
+                { customer: "EDGE RESORT", product: "Sam Miranda Ballerina Rosato", code: "WAUSMBROS010" },
+                { customer: "EDGE RESORT", product: "Sam Miranda Riesling", code: "WAUSMKVRIE010" },
+                { customer: "EDGE RESORT", product: "Sam Miranda Cabernet Sauvignon", code: "WAUSMMRCAB010" },
+                { customer: "EDGE RESORT", product: "Sam Miranda Prosecco", code: "WAUSMPROSP010" },
+                { customer: "EDGE RESORT", product: "Shaw+Smith Sauvignon Blanc", code: "WAUSSSBL010" },
+                { customer: "EDGE RESORT", product: "Shaw+Smith Shiraz", code: "WAUSSSHI010" },
+                { customer: "EDGE RESORT", product: "3 Bridges Chardonnay", code: "WAUWEBCHD010" },
+                { customer: "EDGE RESORT", product: "Richland Chardonnay", code: "WAUWERCHD010" },
+                { customer: "EDGE RESORT", product: "Okiwi Bay Marlboru Sauv Blanc", code: "WAUWESOB010" },
+                { customer: "EDGE RESORT", product: "AOP Sancerre Les Fondettes", code: "WFR27520" },
+                { customer: "EDGE RESORT", product: "Pouilly Fume Les Ombelles", code: "WFR27524" },
+                { customer: "EDGE RESORT", product: "Chablis Domaine Michaut 2020", code: "WFR745530" },
+                { customer: "EDGE RESORT", product: "Chablis Domain Michaut 2021", code: "WFR745530-2021" },
+                { customer: "EDGE RESORT", product: "Bourgogne Chartron Pinot Noir", code: "WFR761493" },
+                { customer: "EDGE RESORT", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
+                { customer: "EDGE RESORT", product: "Gremillet 'Selection' Brut", code: "WFRCGCPG010" },
+                { customer: "EDGE RESORT", product: "Bellavista Franciacorta 750ml", code: "WITETH1401-6-NV" },
+                { customer: "EDGE RESORT", product: "St.Pauls Pinot Grigio AA", code: "WITETH50211-2021" },
+                { customer: "EDGE RESORT", product: "Lavis Pinot Grigio Trentino", code: "WITETH57004-2022" },
+                { customer: "EDGE RESORT", product: "Lavis Sauv Blanc Trevenezie", code: "WITETH57015-2021" },
+                { customer: "EDGE RESORT", product: "La Gioiosa Prosecco", code: "WITETH5901-NV" },
+                { customer: "EDGE RESORT", product: "Sella&Mosca 'La Cala' Vermentino", code: "WITETH6209-6-2022" },
+                { customer: "EDGE RESORT", product: "Ridolfi 'Fiero' Rosso Toscana", code: "WITETH9708-6-2019" },
+                { customer: "EDGE RESORT", product: "Brightwater Gravels Pinot Noir", code: "WNZWLPNN030" },
+                { customer: "EDGE RESORT", product: "Liberated Pinot Noir", code: "WUSJEKJLBPN010" },
+                { customer: "EDGE RESORT", product: "Kendall Jackson V R Merlot", code: "WUSJEKJVRMER010" },
+                { customer: "EDGE RESORT", product: "Joel Gott Pinot Noir SBC", code: "WUSSHWJGSBPN010" },
+                { customer: "SIX SENSES FIJI", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
+                { customer: "SIX SENSES FIJI", product: "Villa Sparina Gavi -750ml", code: "WITETH7702-2022" },
+                { customer: "SIX SENSES FIJI", product: "La Gioiosa Prosecco", code: "WITETH5901-NV" },
+                { customer: "SIX SENSES FIJI", product: "Beans Espresso 1000g", code: "FCAWBSEB1000" },
+                { customer: "SIX SENSES FIJI", product: "Mr Boema Cleaner 500g Jar", code: "ZESBOEK650-1A" },
+                { customer: "SIX SENSES FIJI", product: "Cham Peters Reserve Brut NV", code: "WFRAW 0000 RESBRT" },
+                { customer: "SIX SENSES FIJI", product: "Napa Cellars Merlot", code: "WUSSHWNCMER010" },
+                { customer: "SIX SENSES FIJI", product: "Peter Lehmann P Riesling", code: "WAUAEPLPRIE010" },
+                { customer: "SIX SENSES FIJI", product: "Brightwater Gravels Pinot Gris", code: "WNZWLPNG030" },
+                { customer: "SIX SENSES FIJI", product: "Sheild Pinot Gris", code: "WNZDCSPG010" },
+                { customer: "SIX SENSES FIJI", product: "Lavis Pinot Grigio Trentino", code: "WITETH57004-2021" },
+                { customer: "SIX SENSES FIJI", product: "Joel Gott Pinot Noir SBC", code: "WUSSHWJGSBPN010" },
+                { customer: "SIX SENSES FIJI", product: "Bellavista Franciacorta 750ml", code: "WITETH1401-6-NV" },
+                { customer: "SHERATON RESORT", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
+                { customer: "SHERATON RESORT", product: "Borgogno Barolo Classico", code: "WITETH2401-6-2018" },
+                { customer: "SHERATON RESORT", product: "St.Pauls Pinot Grigio AA", code: "WITETH50211-2021" },
+                { customer: "SHERATON RESORT", product: "Lavis Pinot Grigio Trentino", code: "WITETH57004-2022" },
+                { customer: "SHERATON RESORT", product: "Riscasoli 'Brolio' Chianti", code: "WITETH9305-2020" },
+                { customer: "SHERATON RESORT", product: "Nicolis Amarone d Valpolicella", code: "WITETH0701-6-2017" },
+                { customer: "SHERATON RESORT", product: "Belvento Vermentino Toscana", code: "WITETH6403-6-2022" },
+                { customer: "SHERATON RESORT", product: "Kendall Jackson V R Merlot", code: "WUSJEKJVRMER010" },
+                { customer: "SHERATON RESORT", product: "Kendall Jackson G R Chardonnay", code: "WUSJEKJGRCHD010" },
+                { customer: "SHERATON RESORT", product: "Lavis Pinot Grigio Trentino", code: "WITETH57004-2021" },
+                { customer: "SHERATON RESORT", product: "Cham Peters Reserve Brut NV", code: "WFRAW 0000 RESBRT" },
+                { customer: "Intercontinental Fiji Golf Resort & Spa", product: "Maison Saint Aix Dry Rose 2022", code: "WFRAIXROS21" },
+                { customer: "Intercontinental Fiji Golf Resort & Spa", product: "Rymill 'The Yearling' Cab/Sauv", code: "WAURTYCABS010" }
+            ];
 
-            if (selectedCustomer) {
-                const customerProducts = purchaseData.filter(item => item.customer === selectedCustomer);
-                customerProductsDiv.innerHTML = '<strong>Purchased Products:</strong><br>';
-                customerProducts.forEach(item => {
-                    customerProductsDiv.innerHTML += `<div class="product-item"><strong>${item.product}</strong></div>`; // Make product names bold
-                });
-            }
-            updateTopProducts();
-        }
+            const machineData = [
+                { code: "ZEQFK3400000176547", description: "A300 Franke Coffee Machine", customer: "Altitude Refrigeration Solutions Pte Ltd", type: "Free on Loan", amount: "-", spPerKg: "58.50" },
+                { code: "ZEQFK3400000176513", description: "A300 Franke Coffee Machine", customer: "Asco Motors", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176512", description: "A300 Franke Coffee Machine", customer: "Coral Coast Divers", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176544", description: "A300 Franke Coffee Machine", customer: "Damodar Labasa", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176536", description: "A300 Franke Coffee Machine", customer: "Damodar Townhouse", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176508", description: "A300 Franke Coffee Machine", customer: "Edge Resort", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
+                { code: "ZEQFK3400000176538", description: "A300 Franke Coffee Machine", customer: "Essity", type: "Purchased", amount: "-", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176518", description: "A300 Franke Coffee Machine", customer: "Fiji Police Force", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176519", description: "A300 Franke Coffee Machine", customer: "Grand Pacific Hotel", type: "Free on Loan", amount: "-", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176520", description: "A300 Franke Coffee Machine", customer: "Grand Pacific Hotel", type: "Free on Loan", amount: "-", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176529", description: "A300 Franke Coffee Machine", customer: "Holiday Inn", type: "Free on Loan", amount: "-", spPerKg: "58.50" },
+                { code: "ZEQFK3400000176533", description: "A300 Franke Coffee Machine", customer: "In Stock - Lami", type: "", amount: "-", spPerKg: "-" },
+                { code: "ZEQFK3400000176526", description: "A300 Franke Coffee Machine", customer: "Interlink Shipping", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176545", description: "A300 Franke Coffee Machine", customer: "Kokomo Island Resort", type: "Free on Loan", amount: "-", spPerKg: "46.50" },
+                { code: "ZEQFK3400000176521", description: "A300 Franke Coffee Machine", customer: "Laucala Island Resort Ltd", type: "Purchased", amount: "-", spPerKg: "62.00" },
+                { code: "ZEQFK3400000176535", description: "A300 Franke Coffee Machine", customer: "Laucala Island Resort Ltd", type: "Purchased", amount: "-", spPerKg: "62.00" },
+                { code: "ZEQFK3400000176541", description: "A300 Franke Coffee Machine", customer: "My Golden Spice Pte Ltd", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176515", description: "A300 Franke Coffee Machine", customer: "Nadi Warehouse", type: "", amount: "-", spPerKg: "-" },
+                { code: "ZEQFK3400000176523", description: "A300 Franke Coffee Machine", customer: "Nadi Warehouse", type: "", amount: "-", spPerKg: "-" },
+                { code: "ZEQFK3400000176524", description: "A300 Franke Coffee Machine", customer: "Nadi Warehouse", type: "", amount: "-", spPerKg: "-" },
+                { code: "ZEQFK3400000176543", description: "A300 Franke Coffee Machine", customer: "Nadi Warehouse", type: "", amount: "-", spPerKg: "-" },
+                { code: "ZEQFK3400000176537", description: "A300 Franke Coffee Machine", customer: "Nokonoko Investment", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176510", description: "A300 Franke Coffee Machine", customer: "PAT Consulting Pte Limited T/A TEMO Consulting", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176530", description: "A300 Franke Coffee Machine", customer: "Radisson", type: "Free on Loan", amount: "-", spPerKg: "46.00" },
+                { code: "ZEQFK3400000176506", description: "A300 Franke Coffee Machine", customer: "South Sea Cruises", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
+                { code: "ZEQFK3400000176514", description: "A300 Franke Coffee Machine", customer: "South Sea Cruises", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
+                { code: "ZEQFK3400000176539", description: "A300 Franke Coffee Machine", customer: "The Establishment", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176534", description: "A300 Franke Coffee Machine", customer: "The Hot Bread Kitchen - USP", type: "Rental", amount: "442.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176525", description: "A300 Franke Coffee Machine", customer: "Total - Laucala Beach", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176546", description: "A300 Franke Coffee Machine", customer: "Total - Nadi Backroad (Motorex Complex)", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176527", description: "A300 Franke Coffee Machine", customer: "Total - Navutu", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176542", description: "A300 Franke Coffee Machine", customer: "Total - Sigatoka", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176532", description: "A300 Franke Coffee Machine", customer: "Total Facilities Management", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176540", description: "A300 Franke Coffee Machine", customer: "Total Korovou", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176511", description: "A300 Franke Coffee Machine", customer: "TotalEnergies", type: "Purchased", amount: "-", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176516", description: "A300 Franke Coffee Machine", customer: "TotalEnergies", type: "Purchased", amount: "-", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176517", description: "A300 Franke Coffee Machine", customer: "TotalEnergies", type: "Purchased", amount: "-", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176507", description: "A300 Franke Coffee Machine", customer: "Twenty4Seven Service Station", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176522", description: "A300 Franke Coffee Machine", customer: "Village 4", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176509", description: "A300 Franke Coffee Machine", customer: "Westpac Bank", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176528", description: "A300 Franke Coffee Machine", customer: "Yatu Lau Company", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000176531", description: "A300 Franke Coffee Machine", customer: "Yatu Lau Company", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFKKA200002", description: "A400 Franke Coffee Machine", customer: "Anand & Prasad - Total Saweni", type: "Free on Loan", amount: "", spPerKg: "55.00" },
+                { code: "ZEQFK3400000008848", description: "A400 Franke Coffee Machine", customer: "Damodar Event Cinemas", type: "Free on Loan", amount: "", spPerKg: "55.00" },
+                { code: "ZEQFK3400000008841", description: "A400 Franke Coffee Machine", customer: "Edge Resort", type: "Free on Loan", amount: "", spPerKg: "62.00" },
+                { code: "ZEQFK3400000007095", description: "A400 Franke Coffee Machine", customer: "Epic", type: "Rental", amount: "273.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000007087", description: "A400 Franke Coffee Machine", customer: "Fijian Resort", type: "Free on Loan", amount: "", spPerKg: "55.00" },
+                { code: "ZEQFK3400000007090", description: "A400 Franke Coffee Machine", customer: "Fijian Resort", type: "Free on Loan", amount: "", spPerKg: "55.00" },
+                { code: "ZEQFK3400000008852", description: "A400 Franke Coffee Machine", customer: "Fijian Resort", type: "Free on Loan", amount: "", spPerKg: "55.00" },
+                { code: "ZEQFK3400000007091", description: "A400 Franke Coffee Machine", customer: "FNPF", type: "Rental", amount: "350.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000008844", description: "A400 Franke Coffee Machine", customer: "FNPF", type: "Rental", amount: "350.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000007092", description: "A400 Franke Coffee Machine", customer: "Grand Pacific Hotel", type: "Free on Loan", amount: "", spPerKg: "55.00" },
+                { code: "ZEQFK3400000008849", description: "A400 Franke Coffee Machine", customer: "HFC Bank Nadi", type: "Rental", amount: "350.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000007089", description: "A400 Franke Coffee Machine", customer: "HFC Bank Suva", type: "Rental", amount: "350.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000007088", description: "A400 Franke Coffee Machine", customer: "Holiday Inn", type: "Free on Loan", amount: "", spPerKg: "58.50" },
+                { code: "ZEQFK3400000007085", description: "A400 Franke Coffee Machine", customer: "Radisson", type: "Free on Loan", amount: "", spPerKg: "46.00" },
+                { code: "ZEQFK3400000007093", description: "A400 Franke Coffee Machine", customer: "Radisson", type: "Free on Loan", amount: "", spPerKg: "46.00" },
+                { code: "ZEQFK3400000008846", description: "A400 Franke Coffee Machine", customer: "Radisson", type: "Free on Loan", amount: "", spPerKg: "46.00" },
+                { code: "ZEQFK3400000008845", description: "A400 Franke Coffee Machine", customer: "South Seas", type: "Free on Loan", amount: "", spPerKg: "62.00" },
+                { code: "ZEQFK3400000008847", description: "A400 Franke Coffee Machine", customer: "The Hot Bread Kitchen - Damodar", type: "Rental", amount: "322.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000008843", description: "A400 Franke Coffee Machine", customer: "The Hot Bread Kitchen - Namaka", type: "Rental", amount: "322.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000007094", description: "A400 Franke Coffee Machine", customer: "Total - Flagstaff", type: "Rental", amount: "400.00", spPerKg: "55.00" },
+                { code: "ZEQFK3400000007096", description: "A400 Franke Coffee Machine", customer: "Total Waila", type: "Rental", amount: "296.00", spPerKg: "55.00" },
+                { code: "ZEQFKKA200002", description: "A400 Franke Coffee Machine", customer: "Tradewinds Marine", type: "Purchased", amount: "", spPerKg: "55.00" },
+                { code: "ZEQFK3400000007086", description: "A400 Franke Coffee Machine", customer: "Village 6", type: "Free on Loan", amount: "", spPerKg: "55.00" },
+                { code: "ZEQFK147332", description: "S700 Coffee Machine", customer: "Nadi Stock", type: "", amount: "", spPerKg: "" },
+                { code: "ZEQFK3400000006823", description: "S700 Coffee Machine", customer: "Epic International Pte Ltd", type: "Rental", amount: "372.00", spPerKg: "" },
+                { code: "ZEQFK3400000006825", description: "S700 Coffee Machine", customer: "Lami Stock", type: "", amount: "", spPerKg: "" },
+                { code: "ZEQFK5150527130", description: "S700 Coffee Machine", customer: "Fijian Resort", type: "Free On Loan", amount: "", spPerKg: "" },
+                { code: "ZEQDCF22002110", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Fiji National University", type: "Purchased", amount: "", spPerKg: "55.00" },
+                { code: "ZEQDCF22002111", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Kokomo Island Resort", type: "Free on Loan", amount: "-", spPerKg: "46.50" },
+                { code: "ZEQDCF22002112", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
+                { code: "ZEQDCF22002113", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Mitchell Consultant Pte Ltd", type: "Rental", amount: "360", spPerKg: "55.00" },
+                { code: "ZEQDCF22002114", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
+                { code: "ZEQDCF22002115", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
+                { code: "ZEQDCF22002116", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Laucala Island Resort Ltd", type: "Purchased", amount: "-", spPerKg: "62.00" },
+                { code: "ZEQDCF22002117", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Amma Production", type: "Free on Loan", amount: "-", spPerKg: "55.00" },
+                { code: "ZEQDCF22002118", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
+                { code: "ZEQDCF22002119", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "The Foodie Diner", type: "Rental", amount: "360", spPerKg: "55.00" },
+                { code: "ZEQDCF22002120", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Fijian Resort", type: "Free on Loan", amount: "-", spPerKg: "55.00" },
+                { code: "ZEQDCF22002121", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
+                { code: "ZEQDCF22002122", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Captain's Cafe", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
+                { code: "ZEQDCF22002123", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" },
+                { code: "ZEQDCF22002124", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Lawhill Japan", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
+                { code: "ZEQDCF22002125", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Kokomo Island Resort", type: "Free on Loan", amount: "-", spPerKg: "46.50" },
+                { code: "ZEQDCF22002126", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Tokoriki Island Resort", type: "Free on Loan", amount: "-", spPerKg: "62.00" },
+                { code: "ZEQDCF22002127", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Narayanganj Fiji Pte Ltd", type: "Rental", amount: "360", spPerKg: "55.00" },
+                { code: "ZEQDCF22002128", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Kokomo Island Resort", type: "Free on Loan", amount: "-", spPerKg: "46.50" },
+                { code: "ZEQDCF22002129", description: "Dalla Corte 'STUDIO' Espresso with Grinder", customer: "Stock", type: "Stock", amount: "-", spPerKg: "-" }
+            ];
 
-        // Update customers based on selected product
-        function updateCustomers() {
-            const selectedProduct = productSelect.value;
-            productCustomersDiv.innerHTML = ''; // Reset customers display
-
-            if (selectedProduct) {
-                const productCustomers = purchaseData.filter(item => item.product === selectedProduct);
-                productCustomersDiv.innerHTML = '<strong>Customers Who Bought This Product:</strong><br>';
-                productCustomers.forEach(item => {
-                    productCustomersDiv.innerHTML += `<div class="product-item">${item.customer}</div>`;
-                });
-            }
-            updateTopProducts();
-        }
-
-        // Function to update the top 3 products purchased
-        function updateTopProducts() {
-            const productCounts = {};
-            purchaseData.forEach(item => {
-                productCounts[item.product] = (productCounts[item.product] || 0) + 1;
-            });
-
-            const sortedProducts = Object.entries(productCounts).sort((a, b) => b[1] - a[1]).slice(0, 3);
-            topProductsDiv.innerHTML = ''; // Reset top products display
-            sortedProducts.forEach(([product, count]) => {
-                topProductsDiv.innerHTML += `<li>${product}: ${count} customer(s)</li>`;
-            });
-        }
-
-        // Function to filter data based on search input
-        function filterData() {
-            const searchValue = document.getElementById('searchInput').value.toLowerCase();
-            const filteredCustomers = customers.filter(customer => customer.toLowerCase().includes(searchValue));
-            const filteredProducts = products.filter(product => product.toLowerCase().includes(searchValue));
-
-            // Update customer dropdown
-            customerSelect.innerHTML = '<option value="">-- Select a Customer --</option>';
-            filteredCustomers.forEach(customer => {
-                const option = document.createElement('option');
-                option.value = customer;
-                option.textContent = customer;
-                customerSelect.appendChild(option);
-            });
-
-            // Update product dropdown
-            productSelect.innerHTML = '<option value="">-- Select a Product --</option>';
-            filteredProducts.forEach(product => {
-                const option = document.createElement('option');
-                option.value = product;
-                option.textContent = product; // Only show product name
-                productSelect.appendChild(option);
-            });
-        }
-
-        // Coffee Dashboard Functions
-        const machineSelect = document.getElementById('machineSelect');
-        const machineCustomersDiv = document.getElementById('machineCustomers');
-        const customerDetailsDiv = document.getElementById('customerDetails');
-
-        // Update customers based on selected machine
-        function updateCoffeeCustomers() {
-            const selectedMachine = machineSelect.value;
-            machineCustomersDiv.innerHTML = ''; // Reset customers display
-            customerDetailsDiv.innerHTML = ''; // Reset customer details display
-
-            if (selectedMachine) {
-                const machineCustomers = machineData.filter(item => item.description === selectedMachine);
-                machineCustomersDiv.innerHTML = '<strong>Customers for this Machine:</strong><br>';
-                machineCustomers.forEach(item => {
-                    machineCustomersDiv.innerHTML += `
-                        <div class="product-item">
-                            <strong>Customer Name:</strong> ${item.customer}<br>
-                            <strong>Coffee Machine:</strong> ${item.description}<br>
-                            <strong>Condition:</strong> ${item.type}<br>
-                            <strong>Price:</strong> ${item.amount}<br>
-                            <strong>Selling Price per Kilogram:</strong> ${item.spPerKg}
-                        </div>`;
-                });
-            }
-        }
-
-        // Function to filter coffee customers based on search input
-        function filterCoffeeCustomers() {
-            const searchValue = document.getElementById('coffeeSearchInput').value.toLowerCase();
-            const filteredCustomers = machineData.filter(item => item.customer.toLowerCase().includes(searchValue));
-
-            // Update machine customers display
-            const machineCustomersDiv = document.getElementById('machineCustomers');
-            machineCustomersDiv.innerHTML = ''; // Reset customers display
-
-            if (filteredCustomers.length > 0) {
-                machineCustomersDiv.innerHTML = '<strong>Filtered Customers:</strong><br>';
-                filteredCustomers.forEach(item => {
-                    machineCustomersDiv.innerHTML += `
-                        <div class="product-item">
-                            <strong>Customer Name:</strong> ${item.customer}<br>
-                            <strong>Coffee Machine:</strong> ${item.description}<br>
-                            <strong>Condition:</strong> ${item.type}<br>
-                            <strong>Price:</strong> ${item.amount}<br>
-                            <strong>Selling Price per Kilogram:</strong> ${item.spPerKg}
-                        </div>`;
-                });
-            } else {
-                machineCustomersDiv.innerHTML = '<strong>No customers found.</strong>';
-            }
-        }
-
-        // Toggle between Wine and Coffee dashboards
-        function toggleMenu() {
-            const menuSelect = document.getElementById('menuSelect').value;
+            // --- UI ELEMENTS ---
+            const wineTab = document.getElementById('wineTab');
+            const coffeeTab = document.getElementById('coffeeTab');
             const wineDashboard = document.getElementById('wineDashboard');
             const coffeeDashboard = document.getElementById('coffeeDashboard');
 
-            if (menuSelect === 'wine') {
-                wineDashboard.classList.remove('hidden');
-                coffeeDashboard.classList.add('hidden');
-                populatePurchaseTable(); // Populate wine table
-            } else {
-                coffeeDashboard.classList.remove('hidden');
-                wineDashboard.classList.add('hidden');
-                // No need to populate machine table since it's not displayed
+            const customerSelect = document.getElementById('customerSelect');
+            const productSelect = document.getElementById('productSelect');
+            const customerProductsDiv = document.getElementById('customerProducts');
+            const productCustomersDiv = document.getElementById('productCustomers');
+            const topProductsDiv = document.getElementById('topProducts');
+            const purchaseBody = document.getElementById('purchaseBody');
+
+            const machineSelect = document.getElementById('machineSelect');
+            const machineCustomersDiv = document.getElementById('machineCustomers');
+
+            // --- GLOBAL FUNCTIONS ---
+            window.updateProducts = updateProducts;
+            window.updateCustomers = updateCustomers;
+            window.filterData = filterData;
+            window.updateCoffeeCustomers = updateCoffeeCustomers;
+            window.filterCoffeeCustomers = filterCoffeeCustomers;
+
+            // --- TAB SWITCHING LOGIC ---
+            wineTab.addEventListener('click', () => switchTab('wine'));
+            coffeeTab.addEventListener('click', () => switchTab('coffee'));
+
+            function switchTab(tabName) {
+                if (tabName === 'wine') {
+                    wineTab.classList.add('active');
+                    coffeeTab.classList.remove('active');
+                    wineDashboard.classList.add('active');
+                    coffeeDashboard.classList.remove('active');
+                } else if (tabName === 'coffee') {
+                    coffeeTab.classList.add('active');
+                    wineTab.classList.remove('active');
+                    coffeeDashboard.classList.add('active');
+                    wineDashboard.classList.remove('active');
+                }
             }
-        }
+            
+            // --- WINE DASHBOARD LOGIC ---
+            const customers = [...new Set(purchaseData.map(item => item.customer))].sort();
+            const products = [...new Set(purchaseData.map(item => item.product))].sort();
 
-        // Initial population of the purchase table
-        populatePurchaseTable();
+            function populateWineDropdowns() {
+                customers.forEach(customer => {
+                    const option = document.createElement('option');
+                    option.value = customer;
+                    option.textContent = customer;
+                    customerSelect.appendChild(option);
+                });
 
+                products.forEach(product => {
+                    const option = document.createElement('option');
+                    option.value = product;
+                    option.textContent = product;
+                    productSelect.appendChild(option);
+                });
+            }
+
+            function populatePurchaseTable(data = purchaseData) {
+                purchaseBody.innerHTML = '';
+                data.forEach(item => {
+                    const row = document.createElement('tr');
+                    row.className = 'hover:bg-gray-50';
+                    row.innerHTML = `<td class="p-3">${item.customer}</td><td class="p-3">${item.product}</td><td class="p-3 font-mono text-sm">${item.code}</td>`;
+                    purchaseBody.appendChild(row);
+                });
+            }
+
+            function updateProducts() {
+                const selectedCustomer = customerSelect.value;
+                customerProductsDiv.innerHTML = '';
+
+                if (selectedCustomer) {
+                    const customerProducts = purchaseData.filter(item => item.customer === selectedCustomer);
+                    const list = document.createElement('div');
+                    customerProducts.forEach(item => {
+                       const p = document.createElement('p');
+                       p.className = 'result-item text-sm';
+                       p.innerHTML = `<i class="fas fa-box-open text-blue-400 mr-2"></i><strong>${item.product}</strong>`;
+                       list.appendChild(p);
+                    });
+                     customerProductsDiv.innerHTML = '<h3 class="font-semibold text-gray-800 mb-2">Purchased Products:</h3>';
+                    customerProductsDiv.appendChild(list);
+                }
+            }
+
+            function updateCustomers() {
+                const selectedProduct = productSelect.value;
+                productCustomersDiv.innerHTML = '';
+
+                if (selectedProduct) {
+                    const productCustomers = purchaseData.filter(item => item.product === selectedProduct);
+                    const list = document.createElement('div');
+                    productCustomers.forEach(item => {
+                         const p = document.createElement('p');
+                         p.className = 'result-item text-sm';
+                         p.innerHTML = `<i class="fas fa-user text-green-400 mr-2"></i>${item.customer}`;
+                         list.appendChild(p);
+                    });
+                    productCustomersDiv.innerHTML = '<h3 class="font-semibold text-gray-800 mb-2">Customers Who Bought:</h3>';
+                    productCustomersDiv.appendChild(list);
+                }
+            }
+
+            function updateTopProducts() {
+                const productCounts = {};
+                purchaseData.forEach(item => {
+                    productCounts[item.product] = (productCounts[item.product] || 0) + 1;
+                });
+                const sortedProducts = Object.entries(productCounts).sort((a, b) => b[1] - a[1]).slice(0, 3);
+                topProductsDiv.innerHTML = '';
+                sortedProducts.forEach(([product, count]) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<strong>${product}:</strong> ${count} customer(s)`;
+                    topProductsDiv.appendChild(li);
+                });
+            }
+            
+            function filterData() {
+                const searchValue = document.getElementById('searchInput').value.toLowerCase();
+                const filteredData = purchaseData.filter(item => 
+                    item.customer.toLowerCase().includes(searchValue) || 
+                    item.product.toLowerCase().includes(searchValue) ||
+                    item.code.toLowerCase().includes(searchValue)
+                );
+                populatePurchaseTable(filteredData);
+            }
+            
+            // --- COFFEE DASHBOARD LOGIC ---
+            const machines = [...new Set(machineData.map(item => item.description))].sort();
+
+            function populateCoffeeDropdowns() {
+                machines.forEach(machine => {
+                    const option = document.createElement('option');
+                    option.value = machine;
+                    option.textContent = machine;
+                    machineSelect.appendChild(option);
+                });
+            }
+
+            function updateCoffeeCustomers() {
+                const selectedMachine = machineSelect.value;
+                machineCustomersDiv.innerHTML = '';
+
+                if (selectedMachine) {
+                    const machineCustomers = machineData.filter(item => item.description === selectedMachine);
+                    machineCustomers.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'result-item';
+                        div.innerHTML = `
+                            <p class="font-bold text-lg text-gray-800">${item.customer}</p>
+                            <div class="text-sm text-gray-600 grid grid-cols-2 gap-x-4 mt-2">
+                                <p><strong>Condition:</strong> <span class="font-medium text-gray-800">${item.type || 'N/A'}</span></p>
+                                <p><strong>Price:</strong> <span class="font-medium text-gray-800">${item.amount || 'N/A'}</span></p>
+                                <p><strong>SP per Kg:</strong> <span class="font-medium text-gray-800">${item.spPerKg || 'N/A'}</span></p>
+                                <p><strong>Asset Code:</strong> <span class="font-mono text-xs">${item.code || 'N/A'}</span></p>
+                            </div>
+                        `;
+                        machineCustomersDiv.appendChild(div);
+                    });
+                } else {
+                     machineCustomersDiv.innerHTML = '<p class="text-gray-500">Select a machine to see customer details.</p>';
+                }
+            }
+
+            function filterCoffeeCustomers() {
+                const searchValue = document.getElementById('coffeeSearchInput').value.toLowerCase();
+                const filteredCustomers = machineData.filter(item => item.customer.toLowerCase().includes(searchValue));
+                
+                machineCustomersDiv.innerHTML = '';
+                
+                if (filteredCustomers.length > 0) {
+                    filteredCustomers.forEach(item => {
+                         const div = document.createElement('div');
+                        div.className = 'result-item';
+                        div.innerHTML = `
+                            <p class="font-bold text-lg text-gray-800">${item.customer}</p>
+                            <div class="text-sm text-gray-600 grid grid-cols-2 gap-x-4 mt-2">
+                                <p><strong>Machine:</strong> <span class="font-medium text-gray-800">${item.description}</span></p>
+                                <p><strong>Condition:</strong> <span class="font-medium text-gray-800">${item.type || 'N/A'}</span></p>
+                                <p><strong>Price:</strong> <span class="font-medium text-gray-800">${item.amount || 'N/A'}</span></p>
+                                <p><strong>SP per Kg:</strong> <span class="font-medium text-gray-800">${item.spPerKg || 'N/A'}</span></p>
+                            </div>
+                        `;
+                        machineCustomersDiv.appendChild(div);
+                    });
+                } else {
+                    machineCustomersDiv.innerHTML = '<p class="text-gray-500 text-center">No customers found.</p>';
+                }
+            }
+
+            // --- INITIALIZE APP ---
+            function initializeApp() {
+                // Wine
+                populateWineDropdowns();
+                populatePurchaseTable();
+                updateTopProducts();
+                // Coffee
+                populateCoffeeDropdowns();
+            }
+
+            initializeApp();
+
+        });
     </script>
 </body>
 </html>
